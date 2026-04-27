@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionnaire</title>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 650px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  h2 { margin-bottom: 20px; }
+
+  .question {
+    margin-bottom: 25px;
+  }
+
+  label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  textarea {
+    height: 80px;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #0057b8;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2 id="title"></h2>
+
+  <form id="form"></form>
+
+  <button onclick="submitForm()">Submit</button>
+</div>
+
+<script>
+  // Recupero lingua e ruolo
+  const params = new URLSearchParams(window.location.search);
+  const lang = params.get('lang') || 'en';
+  const role = params.get('role') || 'tenant';
+
+  // RTL per arabo e urdu
+  if (lang === "ar" || lang === "ur") {
+    document.body.setAttribute("dir", "rtl");
+  }
+
+  // ---------------------------
+  // DOMANDE TENANT
+  // ---------------------------
+  const tenantQuestions = [
+    { id: "q1", type: "textarea" },
+    { id: "q2", type: "select",
+      options: ["1 - Not clear", "2", "3", "4", "5 - Very clear"] },
+
+    { id: "q3", type: "select",
+      options: [
+        "Yes, from an intermediary",
+        "Yes, from a friend/family member",
+        "No, I managed everything myself",
+        "I don't remember"
+      ]},
+
+    { id: "q4", type: "select",
+      options: ["Yes", "No", "I don't know / I don't remember"] },
+
+    { id: "q4a", type: "select", conditional: "q4", showIf: "Yes",
+      options: ["1 - Very difficult", "2", "3", "4", "5 - Very easy"] },
+
+    { id: "q5", type: "select",
+      options: ["1 - No control", "2", "3", "4", "5 - Full control"] },
+
+    { id: "q6", type: "select",
+      options: [
+        "Yes, due to language barriers",
+        "Yes, due to lack of clarity",
+        "Yes, due to slow responses",
+        "No",
+        "Prefer not to answer"
+      ]},
+
+    { id: "q6a", type: "textarea", conditional: "q6",
+      showIf: [
+        "Yes, due to language barriers",
+        "Yes, due to lack of clarity",
+        "Yes, due to slow responses"
+      ]},
+
+    { id: "q7", type: "select",
+      options: [
+        "Less than 1 week",
+        "1–2 weeks",
+        "2–4 weeks",
+        "More than 1 month",
+        "I have never modified a contract"
+      ]},
+
+    { id: "q8", type: "select",
+      options: ["1 - Not safer", "2", "3", "4", "5 - Much safer"] },
+
+    { id: "q9", type: "select",
+      options: ["Very useful", "Somewhat useful", "Not very useful", "Not useful at all"] },
+
+    { id: "q10", type: "select",
+      options: ["Yes", "Maybe", "No"] },
+
+    { id: "q11", type: "textarea" }
+  ];
+
+  // ---------------------------
+  // DOMANDE LANDLORD
+  // ---------------------------
+  const landlordQuestions = [
+    { id: "l1", type: "select",
+      options: [
+        "I downloaded a template myself",
+        "I used an agency / CAF",
+        "A friend or professional helped me",
+        "Other"
+      ]},
+
+    { id: "l1a", type: "textarea" },
+
+    { id: "l2", type: "select",
+      options: [
+        "Waiting for Codice Fiscale",
+        "Language barriers",
+        "Difficulty reviewing translated drafts",
+        "Repeated corrections",
+        "No difficulties",
+        "Other"
+      ]},
+
+    { id: "l2a", type: "textarea", conditional: "l2",
+      showIf: [
+        "Language barriers",
+        "Difficulty reviewing translated drafts"
+      ]},
+
+    { id: "l3", type: "select",
+      options: [
+        "Yes, I use it myself",
+        "Yes, but someone else uses it for me",
+        "No, I don’t know it well"
+      ]},
+
+    { id: "l3a", type: "textarea" },
+
+    { id: "l3b", type: "select",
+      options: [
+        "Less than 30 minutes",
+        "30–60 minutes",
+        "1–2 hours",
+        "More than 2 hours",
+        "I pay an intermediary",
+        "I don’t know"
+      ]},
+
+    { id: "l4", type: "select",
+      options: ["1 - Not useful", "2", "3", "4", "5 - Very useful"] },
+
+    { id: "l4a", type: "select",
+      options: [
+        "Personal information",
+        "Rent amount",
+        "Contract dates",
+        "Legal clauses",
+        "Nothing — landlord only"
+      ]},
+
+    { id: "l4b", type: "select",
+      options: [
+        "Full landlord control",
+        "Partial collaboration",
+        "Equal collaboration"
+      ]},
+
+    { id: "l5", type: "select",
+      options: ["Yes", "Maybe", "No"] },
+
+    { id: "l5a", type: "textarea" },
+
+    { id: "l6", type: "select",
+      options: [
+        "Glossary for complex terms",
+        "Step-by-step guided mode",
+        "Simulation mode",
+        "Visual summary",
+        "Chat support",
+        "Other"
+      ]},
+
+    { id: "l7", type: "textarea" },
+
+    { id: "l8", type: "select",
+      options: ["Yes", "Maybe", "No"] }
+  ];
+
+  // ---------------------------
+  // RENDER DOMANDE
+  // ---------------------------
+  function renderQuestions(translations) {
+    const form = document.getElementById("form");
+
+    const questions = role === "tenant" ? tenantQuestions : landlordQuestions;
+    document.getElementById("title").innerText = translations.title;
+
+    questions.forEach(q => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.id = "block-" + q.id;
+
+      let html = `<label>${translations[q.id]}</label>`;
+
+      if (q.type === "textarea") {
+        html += `<textarea id="${q.id}"></textarea>`;
+      } else if (q.type === "select") {
+        html += `<select id="${q.id}">
+                  <option value="">${translations.select_placeholder}</option>
+                  ${q.options.map(o => `<option>${o}</option>`).join("")}
+                 </select>`;
+      }
+
+      div.innerHTML = html;
+      form.appendChild(div);
+    });
+
+    applyConditionalLogic(questions);
+  }
+
+  // ---------------------------
+  // LOGICA CONDIZIONALE
+  // ---------------------------
+  function applyConditionalLogic(questions) {
+    questions.forEach(q => {
+      if (q.conditional) {
+        const trigger = document.getElementById(q.conditional);
+        const block = document.getElementById("block-" + q.id);
+
+        trigger.addEventListener("change", () => {
+          if (Array.isArray(q.showIf)) {
+            block.style.display = q.showIf.includes(trigger.value) ? "block" : "none";
+          } else {
+            block.style.display = trigger.value === q.showIf ? "block" : "none";
+          }
+        });
+
+        block.style.display = "none";
+      }
+    });
+  }
+
+  // ---------------------------
+  // CARICAMENTO TRADUZIONI
+  // ---------------------------
+  fetch(`translations/${lang}.json`)
+    .then(r => r.json())
+    .then(t => renderQuestions(t));
+
+  // ---------------------------
+  // SUBMIT
+  // ---------------------------
+  function submitForm() {
+    const answers = {};
+    const questions = role === "tenant" ? tenantQuestions : landlordQuestions;
+
+    questions.forEach(q => {
+      answers[q.id] = document.getElementById(q.id)?.value || "";
+    });
+
+    fetch("https://TUO-BACKEND.onrender.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lang: lang,
+        role: role,
+        answers: answers
+      })
+    })
+    .then(r => r.json())
+    .then(() => {
+      alert("Thank you! Your answers have been submitted.");
+    });
+  }
+</script>
+
+</body>
+</html>
