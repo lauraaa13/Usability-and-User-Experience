@@ -287,13 +287,15 @@
   }
 
   // ---------------------------
-  // CARICAMENTO TRADUZIONI
+  // CARICAMENTO TRADUZIONI (CORRETTO)
   // ---------------------------
   fetch(`translations/${lang}.json`)
     .then(r => r.json())
-    .then(t => renderQuestions(t));
-    document.getElementById("submitBtn").innerText = t.submit_button;
-  
+    .then(t => {
+      renderQuestions(t);
+      document.getElementById("submitBtn").innerText = t.submit_button;
+    });
+
   // ---------------------------
   // SUBMIT
   // ---------------------------
