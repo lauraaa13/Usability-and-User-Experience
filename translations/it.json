@@ -2,6 +2,11 @@
   "title": "Questionario",
   "select_placeholder": "Seleziona...",
 
+  "role_title": "Seleziona il tuo ruolo",
+  "role_landlord": "Locatore",
+  "role_tenant": "Inquilino",
+  "submit_button": "Invia",
+
   "q1": "Quali difficoltà hai incontrato durante il processo di affitto?",
   "q2": "Quanto ti è stato chiaro il contenuto del contratto di affitto?",
   "q3": "Hai avuto bisogno di aiuto per capire o gestire il contratto?",
