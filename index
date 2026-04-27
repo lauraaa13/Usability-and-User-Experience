@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select language</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background:#f7f7f7; margin:0; padding:20px;
+           display:flex; justify-content:center; align-items:center; height:100vh; }
+    #box { max-width:380px; width:100%; background:#fff; padding:25px; border-radius:12px;
+           box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center; }
+    button { width:100%; padding:14px; margin-top:12px; border:none; border-radius:8px;
+             font-size:1.1rem; background:#0057b8; color:#fff; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div id="box">
+    <h2>Select your language</h2>
+    <button onclick="selectLanguage('it')">Italiano</button>
+    <button onclick="selectLanguage('en')">English</button>
+    <button onclick="selectLanguage('zh')">中文 (Chinese)</button>
+    <button onclick="selectLanguage('ar')">العربية (Arabic)</button>
+    <button onclick="selectLanguage('ur')">اردو (Urdu)</button>
+  </div>
+
+  <script>
+    function selectLanguage(lang) {
+      localStorage.setItem("selectedLanguage", lang);
+      window.location.href = "role.html?lang=" + lang;
+    }
+  </script>
+</body>
+</html>
