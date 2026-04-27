@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select role</title>
+  <style>
+    body { font-family:system-ui,sans-serif; background:#f7f7f7; margin:0; padding:20px;
+           display:flex; justify-content:center; align-items:center; height:100vh; }
+    #box { max-width:380px; width:100%; background:#fff; padding:25px; border-radius:12px;
+           box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center; }
+    button { width:100%; padding:14px; margin-top:12px; border:none; border-radius:8px;
+             font-size:1.1rem; background:#0057b8; color:#fff; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div id="box">
+    <h2 id="title">Select your role</h2>
+    <button onclick="selectRole('landlord')">Landlord</button>
+    <button onclick="selectRole('tenant')">Tenant</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const lang = params.get('lang') || 'en';
+    localStorage.setItem('selectedLanguage', lang);
+
+    function selectRole(role) {
+      localStorage.setItem('selectedRole', role);
+      window.location.href = "questionario.html?lang=" + lang + "&role=" + role;
+    }
+  </script>
+</body>
+</html>
