@@ -2,6 +2,11 @@
   "title": "问卷调查",
   "select_placeholder": "请选择...",
 
+  "role_title": "选择你的身份",
+  "role_landlord": "房东",
+  "role_tenant": "租客",
+  "submit_button": "提交",
+
   "q1": "在租房过程中，你遇到了哪些困难？",
   "q2": "你的租赁合同内容对你来说有多清晰？",
   "q3": "你是否需要帮助来理解或处理你的租赁合同？",
