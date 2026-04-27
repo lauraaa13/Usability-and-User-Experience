@@ -7,6 +7,13 @@
   "role_tenant": "Tenant",
   "submit_button": "Submit",
 
+  "language_title": "Select your language",
+  "lang_it": "Italian",
+  "lang_en": "English",
+  "lang_zh": "Chinese",
+  "lang_ar": "Arabic",
+  "lang_ur": "Urdu",
+
   "q1": "What difficulties have you encountered during the rental process?",
   "q2": "How clear was your rental contract?",
   "q3": "Did you need help to understand or manage your contract?",
