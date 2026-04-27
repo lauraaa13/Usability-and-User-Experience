@@ -5,29 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Select language</title>
   <style>
-    body { font-family: system-ui, sans-serif; background:#f7f7f7; margin:0; padding:20px;
-           display:flex; justify-content:center; align-items:center; height:100vh; }
-    #box { max-width:380px; width:100%; background:#fff; padding:25px; border-radius:12px;
-           box-shadow:0 4px 20px rgba(0,0,0,0.1); text-align:center; }
-    button { width:100%; padding:14px; margin-top:12px; border:none; border-radius:8px;
-             font-size:1.1rem; background:#0057b8; color:#fff; cursor:pointer; }
+    body { 
+      font-family: system-ui, sans-serif; 
+      background:#f7f7f7; 
+      margin:0; 
+      padding:20px;
+      display:flex; 
+      justify-content:center; 
+      align-items:center; 
+      height:100vh; 
+    }
+    #box { 
+      max-width:380px; 
+      width:100%; 
+      background:#fff; 
+      padding:25px; 
+      border-radius:12px;
+      box-shadow:0 4px 20px rgba(0,0,0,0.1); 
+      text-align:center; 
+    }
+    button { 
+      width:100%; 
+      padding:14px; 
+      margin-top:12px; 
+      border:none; 
+      border-radius:8px;
+      font-size:1.1rem; 
+      background:#0057b8; 
+      color:#fff; 
+      cursor:pointer; 
+    }
   </style>
 </head>
 <body>
+
   <div id="box">
-    <h2>Select your language</h2>
-    <button onclick="selectLanguage('it')">Italiano</button>
-    <button onclick="selectLanguage('en')">English</button>
-    <button onclick="selectLanguage('zh')">中文 (Chinese)</button>
-    <button onclick="selectLanguage('ar')">العربية (Arabic)</button>
-    <button onclick="selectLanguage('ur')">اردو (Urdu)</button>
+    <h2 id="title"></h2>
+
+    <button id="btn_it"></button>
+    <button id="btn_en"></button>
+    <button id="btn_zh"></button>
+    <button id="btn_ar"></button>
+    <button id="btn_ur"></button>
   </div>
 
   <script>
+    // Carica EN come lingua di default per la pagina iniziale
+    fetch("translations/en.json")
+      .then(r => r.json())
+      .then(t => {
+        document.getElementById("title").innerText = t.language_title;
+        document.getElementById("btn_it").innerText = t.lang_it;
+        document.getElementById("btn_en").innerText = t.lang_en;
+        document.getElementById("btn_zh").innerText = t.lang_zh;
+        document.getElementById("btn_ar").innerText = t.lang_ar;
+        document.getElementById("btn_ur").innerText = t.lang_ur;
+      });
+
+    // Funzione di selezione lingua
     function selectLanguage(lang) {
       localStorage.setItem("selectedLanguage", lang);
       window.location.href = "role.html?lang=" + lang;
     }
+
+    // Event listeners
+    document.getElementById("btn_it").onclick = () => selectLanguage("it");
+    document.getElementById("btn_en").onclick = () => selectLanguage("en");
+    document.getElementById("btn_zh").onclick = () => selectLanguage("zh");
+    document.getElementById("btn_ar").onclick = () => selectLanguage("ar");
+    document.getElementById("btn_ur").onclick = () => selectLanguage("ur");
   </script>
+
 </body>
 </html>
