@@ -7,6 +7,13 @@
   "role_tenant": "Locataire",
   "submit_button": "Envoyer",
 
+  "language_title": "Sélectionnez votre langue",
+  "lang_it": "Italien",
+  "lang_en": "Anglais",
+  "lang_zh": "Chinois",
+  "lang_ar": "Arabe",
+  "lang_ur": "Ourdou",
+
   "q1": "Quelles difficultés avez-vous rencontrées lors du processus de location ?",
   "q2": "Dans quelle mesure votre contrat de location était-il clair ?",
   "q3": "Avez-vous eu besoin d’aide pour comprendre ou gérer votre contrat ?",
