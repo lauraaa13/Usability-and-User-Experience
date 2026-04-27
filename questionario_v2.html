@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>RLI Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;1,300&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0ebe3;--card:#faf8f4;--ink:#1c1714;--muted:#7a6e65;--accent:#bf4a2b;--pale:#f7ede8;--border:#e0d8ce;--radius:20px;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:16px 12px 40px;}
+.shell{width:100%;max-width:420px;}
+.prog-track{height:3px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s cubic-bezier(.4,0,.2,1);width:0%;}
+.card{background:var(--card);border-radius:var(--radius);padding:28px 24px 32px;box-shadow:0 4px 32px rgba(28,23,20,.09),0 1px 4px rgba(28,23,20,.05);}
+.slide-in{animation:sIn .28s cubic-bezier(.4,0,.2,1);}
+.slide-out{animation:sOut .18s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes sIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-10px)}}
+.chip{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--pale);border-radius:20px;padding:4px 10px;margin-bottom:14px;}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:1.65rem;color:var(--ink);line-height:1.18;margin-bottom:8px;}
+.sub{font-size:.875rem;color:var(--muted);line-height:1.55;margin-bottom:24px;}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.lang-btn{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1.5px solid var(--border);border-radius:14px;background:white;cursor:pointer;transition:all .15s;text-align:left;width:100%;}
+.lang-btn:active,.lang-btn:hover{border-color:var(--accent);background:var(--pale);}
+.flag{font-size:1.4rem;line-height:1;}
+.lang-text{display:flex;flex-direction:column;}
+.lang-name{font-weight:600;font-size:.875rem;color:var(--ink);}
+.lang-sub{font-size:.72rem;color:var(--muted);}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.role-card{border:1.5px solid var(--border);border-radius:16px;padding:22px 14px 18px;text-align:center;cursor:pointer;transition:all .18s;background:white;}
+.role-card:active,.role-card:hover{border-color:var(--accent);background:var(--pale);transform:translateY(-2px);}
+.role-icon{font-size:2.2rem;margin-bottom:10px;}
+.role-name{font-weight:600;font-size:.9rem;color:var(--ink);margin-bottom:4px;}
+.role-desc{font-size:.75rem;color:var(--muted);line-height:1.4;}
+.field+.field{margin-top:16px;}
+.field-label{font-size:.75rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:block;}
+input[type=text],input[type=number]{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--ink);background:white;-webkit-appearance:none;transition:border-color .15s;}
+input:focus{outline:none;border-color:#2a5fa8;}
+.q-label{font-size:1.05rem;font-weight:500;color:var(--ink);line-height:1.5;margin-bottom:8px;}
+.q-hint{font-size:.8rem;color:var(--muted);margin-bottom:18px;line-height:1.45;font-style:italic;}
+textarea{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);background:white;resize:none;min-height:110px;line-height:1.55;transition:border-color .15s;}
+textarea:focus{outline:none;border-color:#2a5fa8;}
+.choices{display:flex;flex-direction:column;gap:9px;}
+.choice{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);text-align:left;transition:all .14s;width:100%;line-height:1.4;}
+.choice:active,.choice:hover{border-color:var(--accent);background:var(--pale);}
+.choice.sel{border-color:var(--accent);background:var(--pale);color:var(--accent);font-weight:500;}
+.dot{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;transition:all .14s;}
+.choice.sel .dot{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px white;}
+.yesno{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.yn{padding:16px;border:1.5px solid var(--border);border-radius:14px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;color:var(--muted);text-align:center;transition:all .14s;}
+.yn:active,.yn:hover{border-color:var(--accent);background:var(--pale);}
+.yn.sel{border-color:var(--accent);background:var(--pale);color:var(--accent);}
+.followup{margin-top:14px;display:none;}
+.followup.show{display:block;}
+.fu-label{font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:.05em;text-transform:uppercase;}
+.nav{display:flex;gap:10px;margin-top:28px;}
+.btn-back{padding:13px 18px;border:1.5px solid var(--border);border-radius:12px;background:white;font-family:'DM Sans',sans-serif;font-size:.875rem;color:var(--muted);cursor:pointer;transition:all .14s;white-space:nowrap;}
+.btn-back:hover{color:var(--ink);border-color:var(--ink);}
+.btn-next{flex:1;padding:14px;border:none;border-radius:12px;background:var(--accent);color:white;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .18s;}
+.btn-next:hover{background:#a03820;}
+.btn-next:active{transform:scale(.98);}
+.ty{text-align:center;padding:12px 0 8px;}
+.ty-icon{font-size:3rem;margin-bottom:18px;display:block;}
+.ty h2{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--ink);margin-bottom:10px;}
+.ty p{font-size:.9rem;color:var(--muted);line-height:1.6;}
+@media(max-width:360px){.card{padding:22px 18px 26px;}h1{font-size:1.45rem;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+  <div class="card" id="card"></div>
+</div>
+<script>
+const SHEET_URL="https://script.google.com/macros/s/AKfycbxoFAHmXwULjWFHvvpaSN4oo0qOP-7p61t2eGidfrX8YUP3E8Yxg_6uEt1mSCpS3b4l/exec";
+let lang="en",role=null,age="",nationality="",answers={},qIdx=0;
+
+const T={
+it:{
+  intro_title:"Affitti a Bologna",intro_sub:"Stiamo studiando come migliorare l'esperienza con i contratti d'affitto in Italia. Ci vorranno circa 4 minuti.",
+  lang_title:"Scegli la lingua",role_title:"Chi sei?",
+  role_t:"Inquilino",role_t_desc:"Vivo in affitto o cerco casa",
+  role_l:"Proprietario",role_l_desc:"Affitto uno o più immobili",
+  demo_title:"Prima di iniziare",demo_sub:"Queste informazioni ci aiutano a capire chi sono i nostri utenti.",
+  f_age:"Età",f_nat:"Nazionalità",ph_age:"es. 27",ph_nat:"es. Cina",
+  next:"Avanti →",back:"← Indietro",submit:"Invia le risposte",
+  req:"Rispondi prima di continuare.",why_label:"Puoi spiegare brevemente?",
+  ty_title:"Grazie mille!",ty_msg:"Le tue risposte ci aiutano a progettare un sistema più accessibile per tutti.",
+  yes:"Sì",no:"No",
+  tqs:[
+    {id:"t1",type:"open",q:"Che problemi o ostacoli specifici hai incontrato durante il processo di affitto?",hint:"es. carenza di case, barriere linguistiche, comunicazione lenta, burocrazia..."},
+    {id:"t2",type:"yesno",q:"Hai mai avuto bisogno o intenzione di modificare clausole specifiche del tuo contratto d'affitto?",follow:"Cosa volevi cambiare, e come è andata?"},
+    {id:"t3",type:"yesno",q:"Hai avuto problemi di comunicazione con il tuo proprietario riguardo al contratto?",follow:"Puoi descrivere la situazione? (es. lingua, tempi, chiarezza dei termini)"},
+    {id:"t4",type:"open",q:"Quanto tempo ha richiesto in genere l'intero processo di modifica e finalizzazione di un contratto?",hint:"Includi comunicazione, attesa di documenti, firma, registrazione..."},
+    {id:"t5",type:"choice",q:"Come ti sentiresti rispetto a un sistema di valutazione dei proprietari su questa piattaforma?",opts:["Lo userei per controllare la reputazione prima di firmare","Lo userei per lasciare un feedback dopo","Lo userei per entrambe le cose","Non mi interessa / Non lo userei"],follow_open:"C'è qualcosa che ti farebbe sentire a disagio con questo sistema?"}
+  ],
+  lqs:[
+    {id:"l1",type:"open",q:"Come hai preparato il tuo ultimo contratto d'affitto, e perché hai scelto quel metodo?",hint:"es. modello scaricato da solo, agenzia, CAF, commercialista, amico esperto..."},
+    {id:"l2",type:"open",q:"Quando affitti a inquilini stranieri, quali sono i principali colli di bottiglia?",hint:"es. attesa del Codice Fiscale, barriere linguistiche, revisione di bozze tradotte, correzioni ripetute..."},
+    {id:"l3",type:"open",q:"Conosci il sistema RLI ufficiale dell'Agenzia delle Entrate? Registri i contratti da solo o paghi qualcuno? Qual è la parte più frustrante e quanto ti costa?",hint:"Sii onesto/a — vogliamo capire la realtà, non la procedura ideale."},
+    {id:"l4",type:"open",q:"Immagina un contratto \"live\" ufficiale: compila automaticamente i dati, fornisce traduzioni e permette a te e all'inquilino di revisionarlo insieme online. Che vantaggi e rischi vedi? Cosa dovrebbe poter modificare l'inquilino? Quale modalità preferiresti?",hint:"Controllo totale del proprietario / collaborazione parziale / collaborazione paritaria"},
+    {id:"l5",type:"open",q:"Se il sistema registrasse automaticamente il contratto e calcolasse le tasse subito dopo la firma digitale — lo useresti? Cosa dovresti vedere sullo schermo per fidarti completamente del calcolo?"},
+    {id:"l6",type:"choice",q:"Fare un errore sul sito fiscale può comportare sanzioni. Che tipo di funzione ti farebbe sentire sicuro/a durante la compilazione?",opts:["Un glossario per i termini complessi","Una simulazione di prova prima dell'invio reale","Un riepilogo visivo prima di confermare","Un supporto chat in tempo reale","Tutte le precedenti"]},
+    {id:"l7",type:"open",q:"Se potessi aggiungere una sola funzione ideale al sito ufficiale degli affitti, quale sarebbe?"},
+    {id:"l8",type:"yesno",q:"Ti sentiresti a tuo agio con un sistema di recensioni reciproche (proprietario ↔ inquilino) visibili ai futuri utenti?",follow:"Ci sono aspetti che ti preoccupano?"}
+  ]
+},
+en:{
+  intro_title:"Renting in Bologna",intro_sub:"We're studying how to improve the rental contract experience in Italy. This takes about 4 minutes.",
+  lang_title:"Choose your language",role_title:"Who are you?",
+  role_t:"Tenant",role_t_desc:"I rent or I'm looking for a place",
+  role_l:"Landlord",role_l_desc:"I rent out one or more properties",
+  demo_title:"Before we start",demo_sub:"This helps us understand who our users are.",
+  f_age:"Age",f_nat:"Nationality",ph_age:"e.g. 27",ph_nat:"e.g. China",
+  next:"Next →",back:"← Back",submit:"Submit answers",
+  req:"Please answer before continuing.",why_label:"Can you briefly explain?",
+  ty_title:"Thank you!",ty_msg:"Your answers help us design a more accessible system for everyone.",
+  yes:"Yes",no:"No",
+  tqs:[
+    {id:"t1",type:"open",q:"What specific problems or obstacles have you encountered during the rental process?",hint:"e.g. housing shortage, language barriers, delayed communication, bureaucracy..."},
+    {id:"t2",type:"yesno",q:"Have you ever had the intention or need to modify specific clauses in a rental contract?",follow:"What did you want to change, and how did it go?"},
+    {id:"t3",type:"yesno",q:"Have you experienced any communication issues or barriers when discussing contract terms with your landlord?",follow:"Can you describe the situation? (e.g. language, timing, clarity of terms)"},
+    {id:"t4",type:"open",q:"In your experience, how much time does the entire process of modifying and finalizing a contract typically take?",hint:"Include communication, waiting for documents, signing, registration..."},
+    {id:"t5",type:"choice",q:"How would you feel about a landlord rating system within this platform?",opts:["I'd use it to check reputation before signing","I'd use it to leave feedback after","I'd use it for both","Not interested / wouldn't use it"],follow_open:"Is there anything that would make you uncomfortable about this system?"}
+  ],
+  lqs:[
+    {id:"l1",type:"open",q:"How did you prepare your last rental contract, and why did you choose that method?",hint:"e.g. downloaded a template, used an agency, CAF, accountant, knowledgeable friend..."},
+    {id:"l2",type:"open",q:"When renting to foreign tenants, what are the main bottlenecks?",hint:"e.g. waiting for Codice Fiscale, language barriers, reviewing translated drafts, repeated corrections..."},
+    {id:"l3",type:"open",q:"Are you familiar with the official RLI system of Agenzia delle Entrate? Do you register contracts yourself or pay someone? What's the most frustrating part and how much does it cost you?",hint:"Be honest — we want to understand reality, not the ideal procedure."},
+    {id:"l4",type:"open",q:"Imagine an official \"live\" contract on the tax website: it auto-fills IDs, provides official translations, and lets you and the tenant review it together online. What benefits and risks do you see? What should the tenant be allowed to edit? Which mode would you prefer?",hint:"Full landlord control / partial collaboration / equal collaboration"},
+    {id:"l5",type:"open",q:"If the system automatically registered the contract and calculated taxes right after both parties e-signed — would you use it? What would you need to see on screen to fully trust the automatic calculation?"},
+    {id:"l6",type:"choice",q:"A mistake on the tax website can lead to fines. What kind of guide feature would make you feel safe while drafting?",opts:["A glossary for complex terms","A test simulation before actual submission","A visual summary before confirming","Live chat support","All of the above"]},
+    {id:"l7",type:"open",q:"If you could add one dream feature to the official rental website, what would it be?"},
+    {id:"l8",type:"yesno",q:"Would you be comfortable with a mutual review system (landlord ↔ tenant) visible to future users?",follow:"Are there any aspects that concern you?"}
+  ]
+},
+zh:{
+  intro_title:"博洛尼亚租房调查",intro_sub:"我们正在研究如何改善意大利的租房合同体验。大约需要4分钟。",
+  lang_title:"选择语言",role_title:"您的身份？",
+  role_t:"租客",role_t_desc:"我正在租房或寻找住所",
+  role_l:"房东",role_l_desc:"我出租一处或多处房产",
+  demo_title:"开始之前",demo_sub:"这些信息帮助我们了解用户群体。",
+  f_age:"年龄",f_nat:"国籍",ph_age:"例如：27",ph_nat:"例如：中国",
+  next:"下一步 →",back:"← 返回",submit:"提交答案",
+  req:"请在继续之前回答此问题。",why_label:"您能简单解释一下吗？",
+  ty_title:"非常感谢！",ty_msg:"您的回答有助于我们为所有人设计更便捷的系统。",
+  yes:"是",no:"否",
+  tqs:[
+    {id:"t1",type:"open",q:"在租房过程中，您遇到了哪些具体问题或障碍？",hint:"例如：房源紧缺、语言障碍、沟通延迟、繁琐的官僚程序..."},
+    {id:"t2",type:"yesno",q:"您是否曾有过修改租房合同中特定条款的需求或意向？",follow:"您想修改什么内容？结果如何？"},
+    {id:"t3",type:"yesno",q:"您在与房东讨论合同条款时，是否遇到过沟通问题或障碍？",follow:"您能描述一下当时的情况吗？（例如：语言、时间、条款清晰度）"},
+    {id:"t4",type:"open",q:"根据您的经验，修改并最终确定合同的整个过程通常需要多长时间？",hint:"包括沟通、等待文件、签署、登记注册..."},
+    {id:"t5",type:"choice",q:"如果该平台有房东评价系统，您会有什么看法？",opts:["我会在签约前用它查看房东信誉","我会在租约结束后用它留下评价","两者我都会使用","我不感兴趣 / 不会使用"],follow_open:"这个系统有没有让您感到不舒适的地方？"}
+  ],
+  lqs:[
+    {id:"l1",type:"open",q:"您是如何准备上一份租房合同的？为什么选择这种方式？",hint:"例如：自己下载模板、使用中介/CAF、会计师、熟悉流程的朋友..."},
+    {id:"l2",type:"open",q:"在向外国租客出租时，主要的瓶颈问题是什么？",hint:"例如：等待税号(Codice Fiscale)、语言障碍、审查翻译草稿、反复修改..."},
+    {id:"l3",type:"open",q:"您熟悉意大利税务局(Agenzia delle Entrate)的官方RLI系统吗？您自己登记合同还是付费给他人？最令您头疼的是什么？花费多少？",hint:"请如实回答——我们想了解实际情况，而非理想流程。"},
+    {id:"l4",type:"open",q:"想象税务网站上有一份官方\"实时\"合同：自动填写双方信息、提供官方翻译，并允许您和租客在线共同审阅填写。您认为有哪些好处和风险？租客应被允许修改什么？您更倾向于哪种合作模式？",hint:"房东完全控制 / 部分协作 / 平等协作"},
+    {id:"l5",type:"open",q:"如果双方电子签名后，系统能自动完成合同登记并立即计算税款——您会使用吗？您需要在屏幕上看到哪些信息才能完全信任系统？"},
+    {id:"l6",type:"choice",q:"在税务网站上犯错可能导致罚款。在填写合同时，哪种引导功能会让您感到安心？",opts:["复杂术语词汇表","正式提交前的模拟测试","确认前的可视化摘要","实时在线客服支持","以上全部"]},
+    {id:"l7",type:"open",q:"如果您可以为官方租房网站添加一个\"魔法\"功能，您希望它是什么？"},
+    {id:"l8",type:"yesno",q:"如果您可以在租约结束后对租客留下评价，租客也可以对您留下评价，且这些信息对未来用户可见——您会接受吗？",follow:"有没有让您担心的方面？"}
+  ]
+},
+ar:{
+  intro_title:"الإيجار في بولونيا",intro_sub:"نحن ندرس كيفية تحسين تجربة عقود الإيجار في إيطاليا. سيستغرق هذا حوالي 4 دقائق.",
+  lang_title:"اختر لغتك",role_title:"من أنت؟",
+  role_t:"مستأجر",role_t_desc:"أستأجر أو أبحث عن مسكن",
+  role_l:"مالك عقار",role_l_desc:"أؤجّر عقاراً أو أكثر",
+  demo_title:"قبل أن نبدأ",demo_sub:"تساعدنا هذه المعلومات على فهم مستخدمينا.",
+  f_age:"العمر",f_nat:"الجنسية",ph_age:"مثال: 27",ph_nat:"مثال: مصر",
+  next:"التالي →",back:"← رجوع",submit:"إرسال الإجابات",
+  req:"يرجى الإجابة قبل المتابعة.",why_label:"هل يمكنك الشرح باختصار؟",
+  ty_title:"شكراً جزيلاً!",ty_msg:"تساعدنا إجاباتك في تصميم نظام أكثر سهولة للجميع.",
+  yes:"نعم",no:"لا",
+  tqs:[
+    {id:"t1",type:"open",q:"ما هي المشكلات أو العقبات المحددة التي واجهتها خلال عملية الإيجار؟",hint:"مثال: شُح الإسكان، الحاجز اللغوي، تأخر التواصل، البيروقراطية..."},
+    {id:"t2",type:"yesno",q:"هل سبق أن احتجت أو أردت تعديل بنود محددة في عقد إيجار؟",follow:"ماذا أردت تغييره، وكيف سارت الأمور؟"},
+    {id:"t3",type:"yesno",q:"هل واجهت مشكلات في التواصل مع المالك بشأن شروط العقد؟",follow:"هل يمكنك وصف الموقف؟ (مثال: اللغة، التوقيت، وضوح الشروط)"},
+    {id:"t4",type:"open",q:"في تجربتك، كم يستغرق عادةً الإجراء الكامل لتعديل العقد وإتمامه؟",hint:"تضمّن التواصل، والانتظار للحصول على الوثائق، والتوقيع، والتسجيل..."},
+    {id:"t5",type:"choice",q:"كيف ستشعر حيال نظام تقييم للملاك على هذه المنصة؟",opts:["سأستخدمه للتحقق من السمعة قبل التوقيع","سأستخدمه لترك تقييم بعد انتهاء العقد","سأستخدمه للأمرين معاً","لست مهتماً / لن أستخدمه"],follow_open:"هل هناك جانب يجعلك غير مرتاح لهذا النظام؟"}
+  ],
+  lqs:[
+    {id:"l1",type:"open",q:"كيف أعددت آخر عقد إيجار لديك، ولماذا اخترت هذه الطريقة؟",hint:"مثال: تنزيل نموذج بنفسك، وكالة/CAF، محاسب، صديق خبير..."},
+    {id:"l2",type:"open",q:"عند تأجير العقارات للمستأجرين الأجانب، ما هي أبرز العقبات؟",hint:"مثال: انتظار رقم الضريبة، الحواجز اللغوية، مراجعة المسودات المترجمة..."},
+    {id:"l3",type:"open",q:"هل تعرف نظام RLI الرسمي لوكالة الإيرادات؟ هل تسجّل العقود بنفسك أم تدفع لشخص آخر؟ ما أكثر جانب محبط وكم يكلفك؟",hint:"كن صريحاً — نريد فهم الواقع، لا الإجراء المثالي."},
+    {id:"l4",type:"open",q:"تخيّل عقداً رسمياً \"مباشراً\" على الموقع الضريبي يملأ البيانات تلقائياً، ويوفر ترجمات، ويتيح لك وللمستأجر مراجعته معاً. ما المزايا والمخاطر؟ ما الذي يُسمح للمستأجر بتعديله؟ أي نمط تفضّل؟",hint:"سيطرة كاملة للمالك / تعاون جزئي / تعاون متساوٍ"},
+    {id:"l5",type:"open",q:"إذا سجّل النظام العقد تلقائياً وحسب ضرائبك فور توقيع الطرفين — هل ستستخدمه؟ ما التفاصيل التي تحتاج رؤيتها لتثق بالحساب الآلي؟"},
+    {id:"l6",type:"choice",q:"الخطأ على الموقع الضريبي قد يؤدي إلى غرامات. أي ميزة إرشادية ستجعلك تشعر بالأمان؟",opts:["قاموس للمصطلحات المعقدة","محاكاة تجريبية قبل الإرسال الفعلي","ملخص مرئي قبل التأكيد","دعم دردشة مباشر","جميع ما سبق"]},
+    {id:"l7",type:"open",q:"لو كان بإمكانك إضافة ميزة واحدة مثالية للموقع الرسمي، ماذا ستختار؟"},
+    {id:"l8",type:"yesno",q:"هل ستكون مرتاحاً لنظام تقييمات متبادلة (مالك ↔ مستأجر) مرئية للمستخدمين المستقبليين؟",follow:"هل هناك جوانب تقلقك؟"}
+  ]
+},
+ur:{
+  intro_title:"بولونیا میں کرایہ داری",intro_sub:"ہم اٹلی میں کرایہ نامے کے تجربے کو بہتر بنانے کا مطالعہ کر رہے ہیں۔ تقریباً 4 منٹ لگیں گے۔",
+  lang_title:"اپنی زبان چنیں",role_title:"آپ کون ہیں؟",
+  role_t:"کرایہ دار",role_t_desc:"میں کرایے پر رہتا/رہتی ہوں یا مکان تلاش کر رہا/رہی ہوں",
+  role_l:"مالک مکان",role_l_desc:"میں ایک یا زیادہ جائیداد کرایے پر دیتا/دیتی ہوں",
+  demo_title:"شروع کرنے سے پہلے",demo_sub:"یہ معلومات ہمیں اپنے صارفین کو سمجھنے میں مدد دیتی ہیں۔",
+  f_age:"عمر",f_nat:"قومیت",ph_age:"مثال: 27",ph_nat:"مثال: پاکستان",
+  next:"اگلا →",back:"← پیچھے",submit:"جوابات جمع کریں",
+  req:"جاری رکھنے سے پہلے جواب دیں۔",why_label:"کیا آپ مختصراً وضاحت کر سکتے ہیں؟",
+  ty_title:"بہت شکریہ!",ty_msg:"آپ کے جوابات ہمیں سب کے لیے ایک زیادہ قابل رسائی نظام ڈیزائن کرنے میں مدد دیتے ہیں۔",
+  yes:"ہاں",no:"نہیں",
+  tqs:[
+    {id:"t1",type:"open",q:"کرایہ کے عمل کے دوران آپ کو کن مخصوص مسائل یا رکاوٹوں کا سامنا ہوا؟",hint:"مثلاً: گھروں کی قلت، زبان کی رکاوٹ، سست مواصلات، سرکاری کاغذ بازی..."},
+    {id:"t2",type:"yesno",q:"کیا آپ نے کبھی کرایہ نامے میں مخصوص شقوں کو تبدیل کرنے کی ضرورت یا ارادہ محسوس کیا؟",follow:"آپ کیا بدلنا چاہتے تھے، اور نتیجہ کیا رہا؟"},
+    {id:"t3",type:"yesno",q:"کیا آپ کو اپنے مالک مکان کے ساتھ کرایہ نامے کی شرائط پر بات کرتے وقت مواصلاتی مسائل کا سامنا ہوا؟",follow:"کیا آپ صورتحال بیان کر سکتے ہیں؟ (مثلاً: زبان، وقت، شرائط کی وضاحت)"},
+    {id:"t4",type:"open",q:"آپ کے تجربے میں، کرایہ نامے میں ترمیم اور اسے حتمی شکل دینے میں عموماً کتنا وقت لگتا ہے؟",hint:"مواصلات، دستاویزات کا انتظار، دستخط، اندراج سب شامل کریں..."},
+    {id:"t5",type:"choice",q:"اس پلیٹ فارم پر مالکوں کے لیے ریٹنگ سسٹم کے بارے میں آپ کیا سوچتے ہیں؟",opts:["دستخط سے پہلے مالک کی ساکھ جانچنے کے لیے استعمال کروں گا","بعد میں رائے دینے کے لیے استعمال کروں گا","دونوں مقاصد کے لیے","مجھے دلچسپی نہیں / استعمال نہیں کروں گا"],follow_open:"کیا اس نظام میں کوئی چیز آپ کو بے چین کرتی ہے؟"}
+  ],
+  lqs:[
+    {id:"l1",type:"open",q:"آپ نے اپنا آخری کرایہ نامہ کیسے تیار کیا، اور آپ نے یہ طریقہ کیوں چنا؟",hint:"مثلاً: خود ٹیمپلیٹ ڈاؤن لوڈ کیا، ایجنسی/CAF، اکاؤنٹنٹ، تجربہ کار دوست..."},
+    {id:"l2",type:"open",q:"غیر ملکی کرایہ داروں کو کرایہ دیتے وقت، بنیادی رکاوٹیں کیا ہیں؟",hint:"مثلاً: ٹیکس نمبر کا انتظار، زبان کی رکاوٹ، ترجمہ شدہ مسودوں کا جائزہ..."},
+    {id:"l3",type:"open",q:"کیا آپ اٹالین ریونیو ایجنسی کے سرکاری RLI نظام سے واقف ہیں؟ کیا آپ خود رجسٹر کرتے ہیں یا کسی کو ادائیگی کرتے ہیں؟ سب سے پریشان کن چیز کیا ہے؟",hint:"ایمانداری سے بتائیں — ہم حقیقت جاننا چاہتے ہیں۔"},
+    {id:"l4",type:"open",q:"تصور کریں کہ ٹیکس ویب سائٹ پر ایک سرکاری \"لائیو\" معاہدہ ہو جو خودکار طور پر ڈیٹا بھرتا ہو اور آپ اور کرایہ دار مل کر آن لائن جائزہ لے سکیں۔ آپ کو کیا فوائد اور خطرات نظر آتے ہیں؟",hint:"مالک کا مکمل کنٹرول / جزوی تعاون / مساوی تعاون"},
+    {id:"l5",type:"open",q:"اگر نظام دونوں فریقوں کے الیکٹرانک دستخط کے فوری بعد خودکار طور پر معاہدہ رجسٹر کر کے ٹیکس حساب کر دے — کیا آپ اسے استعمال کریں گے؟"},
+    {id:"l6",type:"choice",q:"ٹیکس ویب سائٹ پر غلطی جرمانے کا سبب بن سکتی ہے۔ کس قسم کی رہنمائی آپ کو محفوظ محسوس کرائے گی؟",opts:["پیچیدہ اصطلاحات کی لغت","اصل جمع کرانے سے پہلے آزمائشی نقل","تصدیق سے پہلے بصری خلاصہ","ریئل ٹائم چیٹ سپورٹ","مذکورہ بالا سب"]},
+    {id:"l7",type:"open",q:"اگر آپ سرکاری کرایہ ویب سائٹ میں ایک 'جادوئی' خصوصیت شامل کر سکتے، تو وہ کیا ہوگی؟"},
+    {id:"l8",type:"yesno",q:"کیا آپ باہمی جائزہ نظام (مالک ↔ کرایہ دار) سے راحت محسوس کریں گے جو مستقبل کے صارفین کو دکھائی دے؟",follow:"کوئی پہلو جو آپ کو پریشان کرتا ہو؟"}
+  ]
+},
+es:{
+  intro_title:"Alquilar en Bolonia",intro_sub:"Estudiamos cómo mejorar la experiencia con los contratos de alquiler en Italia. Son unos 4 minutos.",
+  lang_title:"Elige tu idioma",role_title:"¿Quién eres?",
+  role_t:"Inquilino/a",role_t_desc:"Vivo de alquiler o busco piso",
+  role_l:"Propietario/a",role_l_desc:"Alquilo uno o varios inmuebles",
+  demo_title:"Antes de empezar",demo_sub:"Esta información nos ayuda a conocer a nuestros usuarios.",
+  f_age:"Edad",f_nat:"Nacionalidad",ph_age:"ej. 27",ph_nat:"ej. China",
+  next:"Siguiente →",back:"← Atrás",submit:"Enviar respuestas",
+  req:"Por favor responde antes de continuar.",why_label:"¿Puedes explicarlo brevemente?",
+  ty_title:"¡Muchas gracias!",ty_msg:"Tus respuestas nos ayudan a diseñar un sistema más accesible para todos.",
+  yes:"Sí",no:"No",
+  tqs:[
+    {id:"t1",type:"open",q:"¿Qué problemas u obstáculos específicos has encontrado durante el proceso de alquiler?",hint:"p. ej. escasez de vivienda, barrera idiomática, comunicación lenta, burocracia..."},
+    {id:"t2",type:"yesno",q:"¿Has tenido alguna vez la necesidad o intención de modificar cláusulas específicas de un contrato de alquiler?",follow:"¿Qué querías cambiar y cómo fue?"},
+    {id:"t3",type:"yesno",q:"¿Has tenido problemas de comunicación al hablar de las condiciones del contrato con tu casero/a?",follow:"¿Puedes describir la situación? (p. ej. idioma, tiempos, claridad de los términos)"},
+    {id:"t4",type:"open",q:"En tu experiencia, ¿cuánto tiempo suele llevar todo el proceso de modificar y finalizar un contrato?",hint:"Incluye comunicación, espera de documentos, firma, registro..."},
+    {id:"t5",type:"choice",q:"¿Qué te parecería un sistema de valoración de propietarios en esta plataforma?",opts:["Lo usaría para comprobar la reputación antes de firmar","Lo usaría para dejar una opinión después","Lo usaría para ambas cosas","No me interesa / no lo usaría"],follow_open:"¿Hay algo que te incomodaría de este sistema?"}
+  ],
+  lqs:[
+    {id:"l1",type:"open",q:"¿Cómo preparaste tu último contrato de alquiler y por qué elegiste ese método?",hint:"p. ej. plantilla descargada tú mismo, agencia, CAF, gestor, amigo con experiencia..."},
+    {id:"l2",type:"open",q:"Al alquilar a inquilinos extranjeros, ¿cuáles son los principales cuellos de botella?",hint:"p. ej. esperar el Codice Fiscale, barreras idiomáticas, revisar borradores traducidos, correcciones repetidas..."},
+    {id:"l3",type:"open",q:"¿Conoces el sistema RLI oficial de la Agencia Tributaria italiana? ¿Registras los contratos tú mismo o pagas a alguien? ¿Qué es lo más frustrante y cuánto te cuesta?",hint:"Sé honesto/a — queremos entender la realidad, no el procedimiento ideal."},
+    {id:"l4",type:"open",q:"Imagina un contrato oficial \"en vivo\" en el sitio fiscal que rellena datos automáticamente y permite que tú y el inquilino lo reviséis juntos online. ¿Qué ventajas y riesgos ves? ¿Qué debería poder editar el inquilino? ¿Qué modo preferirías?",hint:"Control total del propietario / colaboración parcial / colaboración igualitaria"},
+    {id:"l5",type:"open",q:"Si el sistema registrase automáticamente el contrato y calculase los impuestos justo después de que ambos firmasen electrónicamente — ¿lo usarías? ¿Qué necesitarías ver en pantalla para confiar plenamente?"},
+    {id:"l6",type:"choice",q:"Un error en el sitio fiscal puede acarrear sanciones. ¿Qué función de ayuda te haría sentir seguro/a al redactar?",opts:["Un glosario de términos complejos","Una simulación de prueba antes del envío real","Un resumen visual antes de confirmar","Soporte por chat en tiempo real","Todas las anteriores"]},
+    {id:"l7",type:"open",q:"Si pudieras añadir una función de ensueño al sitio oficial de alquiler, ¿cuál sería?"},
+    {id:"l8",type:"yesno",q:"¿Te sentirías cómodo/a con un sistema de reseñas mutuas (propietario ↔ inquilino) visibles para futuros usuarios?",follow:"¿Hay algún aspecto que te preocupe?"}
+  ]
+},
+fr:{
+  intro_title:"Louer à Bologne",intro_sub:"Nous étudions comment améliorer l'expérience des contrats de location en Italie. Comptez environ 4 minutes.",
+  lang_title:"Choisissez votre langue",role_title:"Qui êtes-vous ?",
+  role_t:"Locataire",role_t_desc:"Je loue ou je cherche un logement",
+  role_l:"Propriétaire",role_l_desc:"Je loue un ou plusieurs biens",
+  demo_title:"Avant de commencer",demo_sub:"Ces informations nous aident à comprendre qui sont nos utilisateurs.",
+  f_age:"Âge",f_nat:"Nationalité",ph_age:"ex. 27",ph_nat:"ex. Chine",
+  next:"Suivant →",back:"← Retour",submit:"Envoyer les réponses",
+  req:"Veuillez répondre avant de continuer.",why_label:"Pouvez-vous expliquer brièvement ?",
+  ty_title:"Merci beaucoup !",ty_msg:"Vos réponses nous aident à concevoir un système plus accessible pour tous.",
+  yes:"Oui",no:"Non",
+  tqs:[
+    {id:"t1",type:"open",q:"Quels problèmes ou obstacles spécifiques avez-vous rencontrés lors du processus de location ?",hint:"ex. pénurie de logements, barrière linguistique, communication lente, bureaucratie..."},
+    {id:"t2",type:"yesno",q:"Avez-vous déjà eu l'intention ou le besoin de modifier des clauses spécifiques d'un contrat de location ?",follow:"Que vouliez-vous changer, et comment cela s'est-il passé ?"},
+    {id:"t3",type:"yesno",q:"Avez-vous rencontré des problèmes de communication avec votre propriétaire concernant les termes du contrat ?",follow:"Pouvez-vous décrire la situation ? (ex. langue, délais, clarté des termes)"},
+    {id:"t4",type:"open",q:"D'après votre expérience, combien de temps prend généralement tout le processus de modification et de finalisation d'un contrat ?",hint:"Incluez la communication, l'attente des documents, la signature, l'enregistrement..."},
+    {id:"t5",type:"choice",q:"Que penseriez-vous d'un système de notation des propriétaires sur cette plateforme ?",opts:["Je l'utiliserais pour vérifier la réputation avant de signer","Je l'utiliserais pour laisser un avis après","Je l'utiliserais pour les deux","Cela ne m'intéresse pas / je ne l'utiliserais pas"],follow_open:"Y a-t-il quelque chose qui vous mettrait mal à l'aise avec ce système ?"}
+  ],
+  lqs:[
+    {id:"l1",type:"open",q:"Comment avez-vous préparé votre dernier contrat de location, et pourquoi avez-vous choisi cette méthode ?",hint:"ex. modèle téléchargé soi-même, agence, CAF, comptable, ami expert..."},
+    {id:"l2",type:"open",q:"Lorsque vous louez à des locataires étrangers, quels sont les principaux obstacles ?",hint:"ex. attente du Codice Fiscale, barrière linguistique, révision de brouillons traduits, corrections répétées..."},
+    {id:"l3",type:"open",q:"Connaissez-vous le système RLI officiel de l'Agence des revenus italienne ? Enregistrez-vous vous-même les contrats ou payez-vous quelqu'un ? Quelle est la partie la plus frustrante et combien cela vous coûte-t-il ?",hint:"Soyez honnête — nous voulons comprendre la réalité, pas la procédure idéale."},
+    {id:"l4",type:"open",q:"Imaginez un contrat officiel \"en direct\" sur le site fiscal qui remplit automatiquement les données et vous permet, à vous et au locataire, de le réviser ensemble en ligne. Quels avantages et risques voyez-vous ? Que devrait pouvoir modifier le locataire ? Quel mode préféreriez-vous ?",hint:"Contrôle total du propriétaire / collaboration partielle / collaboration égale"},
+    {id:"l5",type:"open",q:"Si le système enregistrait automatiquement le contrat et calculait vos impôts juste après la signature électronique des deux parties — l'utiliseriez-vous ? Que devriez-vous voir à l'écran pour lui faire entièrement confiance ?"},
+    {id:"l6",type:"choice",q:"Une erreur sur le site fiscal peut entraîner des amendes. Quel type de guide vous mettrait à l'aise lors de la rédaction ?",opts:["Un glossaire pour les termes complexes","Une simulation test avant soumission réelle","Un résumé visuel avant confirmation","Assistance par chat en temps réel","Toutes les options ci-dessus"]},
+    {id:"l7",type:"open",q:"Si vous pouviez ajouter une fonction idéale au site officiel de location, laquelle serait-ce ?"},
+    {id:"l8",type:"yesno",q:"Seriez-vous à l'aise avec un système d'avis mutuels (propriétaire ↔ locataire) visibles pour les futurs utilisateurs ?",follow:"Y a-t-il des aspects qui vous préoccupent ?"}
+  ]
+}
+};
+
+const LANGS=[
+  {code:"it",flag:"🇮🇹",name:"Italiano",sub:"Italian"},
+  {code:"en",flag:"🇬🇧",name:"English",sub:"Inglese"},
+  {code:"zh",flag:"🇨🇳",name:"中文",sub:"Chinese"},
+  {code:"ar",flag:"🇸🇦",name:"العربية",sub:"Arabic"},
+  {code:"ur",flag:"🇵🇰",name:"اردو",sub:"Urdu"},
+  {code:"es",flag:"🇪🇸",name:"Español",sub:"Spanish"},
+  {code:"fr",flag:"🇫🇷",name:"Français",sub:"French"}
+];
+
+const card=document.getElementById("card"),pf=document.getElementById("pf");
+function isRTL(l){return l==="ar"||l==="ur";}
+function setDir(l){document.body.dir=isRTL(l)?"rtl":"ltr";}
+function prog(p){pf.style.width=p+"%";}
+function render(html,p){
+  card.classList.remove("slide-in");card.classList.add("slide-out");
+  setTimeout(()=>{card.innerHTML=html;card.classList.remove("slide-out");card.classList.add("slide-in");setDir(lang);},170);
+  prog(p);
+}
+
+function showLang(){
+  const btns=LANGS.map(l=>`<button class="lang-btn" onclick="pickLang('${l.code}')"><span class="flag">${l.flag}</span><span class="lang-text"><span class="lang-name">${l.name}</span><span class="lang-sub">${l.sub}</span></span></button>`).join("");
+  render(`<div class="chip">Welcome</div><h1>RLI Survey</h1><p class="sub">Select language / Scegli la lingua</p><div class="lang-grid">${btns}</div>`,4);
+}
+function pickLang(l){lang=l;showRole();}
+
+function showRole(){
+  const t=T[lang];
+  render(`<div class="chip">1 / 3</div><h1>${t.role_title}</h1><p class="sub">&nbsp;</p><div class="role-grid"><div class="role-card" onclick="pickRole('tenant')"><div class="role-icon">🏠</div><div class="role-name">${t.role_t}</div><div class="role-desc">${t.role_t_desc}</div></div><div class="role-card" onclick="pickRole('landlord')"><div class="role-icon">🔑</div><div class="role-name">${t.role_l}</div><div class="role-desc">${t.role_l_desc}</div></div></div><div class="nav"><button class="btn-back" onclick="showLang()">←</button></div>`,14);
+}
+function pickRole(r){role=r;showDemo();}
+
+function showDemo(){
+  const t=T[lang];
+  render(`<div class="chip">2 / 3</div><h1>${t.demo_title}</h1><p class="sub">${t.demo_sub}</p><div class="field"><label class="field-label">${t.f_age}</label><input type="number" min="16" max="99" placeholder="${t.ph_age}" value="${age}" oninput="age=this.value"></div><div class="field"><label class="field-label">${t.f_nat}</label><input type="text" placeholder="${t.ph_nat}" value="${nationality}" oninput="nationality=this.value"></div><div class="nav"><button class="btn-back" onclick="showRole()">${t.back}</button><button class="btn-next" onclick="startQ()">${t.next}</button></div>`,24);
+}
+
+function getQs(){return role==="tenant"?T[lang].tqs:T[lang].lqs;}
+function startQ(){qIdx=0;showQ();}
+
+function showQ(){
+  const qs=getQs(),t=T[lang];
+  if(qIdx>=qs.length){submitAnswers();return;}
+  const q=qs[qIdx],total=qs.length,isLast=qIdx===total-1;
+  const p=24+((qIdx+1)/total)*72;
+  let body="";
+
+  if(q.type==="open"){
+    body=`${q.hint?`<p class="q-hint">${q.hint}</p>`:""}<textarea id="ta" placeholder="...">${answers[q.id]||""}</textarea>`;
+  } else if(q.type==="yesno"){
+    const cur=answers[q.id]||"";
+    body=`<div class="yesno"><button class="yn${cur==="yes"?" sel":""}" onclick="setYN('${q.id}','yes',this)">✓ ${t.yes}</button><button class="yn${cur==="no"?" sel":""}" onclick="setYN('${q.id}','no',this)">✗ ${t.no}</button></div>${q.follow?`<div class="followup${cur?" show":""}" id="fu"><p class="fu-label" style="margin-top:14px">${t.why_label}</p><textarea id="fu_ta" placeholder="...">${answers[q.id+"_why"]||""}</textarea></div>`:""}`;
+  } else if(q.type==="choice"){
+    const cur=answers[q.id]||"";
+    body=`<div class="choices">${q.opts.map(o=>`<button class="choice${cur===o?" sel":""}" onclick="setChoice('${q.id}','${o.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}',this)"><span class="dot"></span>${o}</button>`).join("")}</div>${q.follow_open?`<div class="followup${cur?" show":""}" id="fu" style="margin-top:14px"><p class="fu-label">${t.why_label}</p><textarea id="fu_ta" placeholder="...">${answers[q.id+"_why"]||""}</textarea></div>`:""}`;
+  }
+
+  render(`<div class="chip">${qIdx+1} / ${total}</div><p class="q-label">${q.q}</p>${body}<div class="nav"><button class="btn-back" onclick="goBack()">${t.back}</button><button class="btn-next" onclick="goNext()">${isLast?t.submit:t.next}</button></div>`,p);
+}
+
+function setYN(id,val,el){
+  answers[id]=val;
+  document.querySelectorAll(".yn").forEach(b=>b.classList.remove("sel"));
+  el.classList.add("sel");
+  const fu=document.getElementById("fu");
+  if(fu)fu.classList.add("show");
+}
+function setChoice(id,val,el){
+  answers[id]=val;
+  document.querySelectorAll(".choice").forEach(b=>b.classList.remove("sel"));
+  el.classList.add("sel");
+  const fu=document.getElementById("fu");
+  if(fu)fu.classList.add("show");
+}
+function goNext(){
+  const qs=getQs(),q=qs[qIdx],t=T[lang];
+  const ta=document.getElementById("ta");
+  if(ta)answers[q.id]=ta.value;
+  const futa=document.getElementById("fu_ta");
+  if(futa)answers[q.id+"_why"]=futa.value;
+  if(q.type==="open"&&!answers[q.id]?.trim()){alert(t.req);return;}
+  if((q.type==="yesno"||q.type==="choice")&&!answers[q.id]){alert(t.req);return;}
+  qIdx++;showQ();
+}
+function goBack(){if(qIdx===0){showDemo();return;}qIdx--;showQ();}
+
+function submitAnswers(){
+  const payload={timestamp:new Date().toISOString(),lang,role,age,nationality,...answers};
+  if(SHEET_URL&&SHEET_URL!=="YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"){
+    fetch(SHEET_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).catch(()=>{});
+  }
+  const t=T[lang];
+  render(`<div class="ty"><span class="ty-icon">✅</span><h2>${t.ty_title}</h2><p>${t.ty_msg}</p></div>`,100);
+}
+
+showLang();
+</script>
+</body>
+</html>
