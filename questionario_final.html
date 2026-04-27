@@ -371,9 +371,13 @@ function goBack(){if(qIdx===0){showDemo();return;}qIdx--;showQ();}
 
 function submitAnswers(){
   const payload={timestamp:new Date().toISOString(),lang,role,age,nationality,...answers};
-  if(SHEET_URL&&SHEET_URL!=="https://script.google.com/macros/s/AKfycbyLnW-dKPiAdZn91qb0LOnti2t0XPtTYZa9yrlrkn8oxAbS4wZURawOknsiYt-t_eJo/exec"){
-    fetch(SHEET_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).catch(()=>{});
-  }
+  // Use no-cors to avoid CORS block — Apps Script accepts this
+  fetch(SHEET_URL,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"text/plain"},
+    body:JSON.stringify(payload)
+  }).catch(()=>{});
   const t=T[lang];
   render(`<div class="ty"><span class="ty-icon">✅</span><h2>${t.ty_title}</h2><p>${t.ty_msg}</p></div>`,100);
 }
