@@ -7,6 +7,13 @@
   "role_tenant": "Inquilino",
   "submit_button": "Enviar",
 
+  "language_title": "Selecciona tu idioma",
+  "lang_it": "Italiano",
+  "lang_en": "Inglés",
+  "lang_zh": "Chino",
+  "lang_ar": "Árabe",
+  "lang_ur": "Urdu",
+
   "q1": "¿Qué dificultades has encontrado durante el proceso de alquiler?",
   "q2": "¿Qué tan claro fue el contenido de tu contrato de alquiler?",
   "q3": "¿Necesitaste ayuda para entender o gestionar tu contrato?",
