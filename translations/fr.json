@@ -2,6 +2,11 @@
   "title": "Questionnaire",
   "select_placeholder": "Sélectionner...",
 
+  "role_title": "Sélectionnez votre rôle",
+  "role_landlord": "Propriétaire",
+  "role_tenant": "Locataire",
+  "submit_button": "Envoyer",
+
   "q1": "Quelles difficultés avez-vous rencontrées lors du processus de location ?",
   "q2": "Dans quelle mesure votre contrat de location était-il clair ?",
   "q3": "Avez-vous eu besoin d’aide pour comprendre ou gérer votre contrat ?",
