@@ -119,21 +119,22 @@ en:{
   ty_title:"Thank you!",ty_msg:"Your answers help us design a more accessible system for everyone.",
   yes:"Yes",no:"No",
   tqs:[
-    {id:"t1",type:"open",q:"What specific problems or obstacles have you encountered during the rental process?",hint:"e.g. housing shortage, language barriers, delayed communication, bureaucracy..."},
+    {id:"t1",type:"open",q:"Looking back at your entire house-hunting journey, which specific moment made you feel the most powerless or anxious?",hint:"e.g. housing shortage, language barrier, delayed communication..."},
     {id:"t2",type:"yesno",q:"Have you ever had the intention or need to modify specific clauses in a rental contract?",follow:"What did you want to change, and how did it go?"},
     {id:"t3",type:"yesno",q:"Have you experienced any communication issues or barriers when discussing contract terms with your landlord?",follow:"Can you describe the situation? (e.g. language, timing, clarity of terms)"},
     {id:"t4",type:"open",q:"In your experience, how much time does the entire process of modifying and finalizing a contract typically take?",hint:"Include communication, waiting for documents, signing, registration..."},
-    {id:"t5",type:"choice",q:"How would you feel about a landlord rating system within this platform?",opts:["I'd use it to check reputation before signing","I'd use it to leave feedback after","I'd use it for both","Not interested / wouldn't use it"],follow_open:"Is there anything that would make you uncomfortable about this system?"}
+    {id:"t5",type:"yesno",q:"Do you feel that having a 'Verified Profile' (showing your identity and financial stability pre-checked) would change the way landlords treat your inquiries?",follow:"Why? What difference do you think it would make?"},
+    {id:"t6",type:"yesno",q:"How would you feel if there were a rating system for landlords within this platform? Would you actually use such a feature — either to check a landlord's reputation or to leave your own feedback?",follow:"Why? Would anything make you uncomfortable about this system?"}
   ],
   lqs:[
-    {id:"l1",type:"open",q:"How did you prepare your last rental contract, and why did you choose that method?",hint:"e.g. downloaded a template, used an agency, CAF, accountant, knowledgeable friend..."},
-    {id:"l2",type:"open",q:"When renting to foreign tenants, what are the main bottlenecks?",hint:"e.g. waiting for Codice Fiscale, language barriers, reviewing translated drafts, repeated corrections..."},
-    {id:"l3",type:"open",q:"Are you familiar with the official RLI system of Agenzia delle Entrate? Do you register contracts yourself or pay someone? What's the most frustrating part and how much does it cost you?",hint:"Be honest — we want to understand reality, not the ideal procedure."},
-    {id:"l4",type:"open",q:"Imagine an official \"live\" contract on the tax website: it auto-fills IDs, provides official translations, and lets you and the tenant review it together online. What benefits and risks do you see? What should the tenant be allowed to edit? Which mode would you prefer?",hint:"Full landlord control / partial collaboration / equal collaboration"},
-    {id:"l5",type:"open",q:"If the system automatically registered the contract and calculated taxes right after both parties e-signed — would you use it? What would you need to see on screen to fully trust the automatic calculation?"},
-    {id:"l6",type:"choice",q:"A mistake on the tax website can lead to fines. What kind of guide feature would make you feel safe while drafting?",opts:["A glossary for complex terms","A test simulation before actual submission","A visual summary before confirming","Live chat support","All of the above"]},
-    {id:"l7",type:"open",q:"If you could add one dream feature to the official rental website, what would it be?"},
-    {id:"l8",type:"yesno",q:"Would you be comfortable with a mutual review system (landlord ↔ tenant) visible to future users?",follow:"Are there any aspects that concern you?"}
+    {id:"l1",type:"choice",q:"How do you usually prepare the text for your rental contracts?",opts:["I download a template from the internet and do it myself","I rely on a real estate agency","My accountant (commercialista) or CAF handles it","I use an old contract and just change the names"]},
+    {id:"l2",type:"choice",q:"What is the main reason you delegate or struggle with the Agenzia delle Entrate (RLI) website?",opts:["I am afraid of making mistakes and getting fined","The website is too complicated / the language is too bureaucratic","I don't have time to waste on it","I already do it myself without any problems","Other"],follow_open:"If other, please specify:"},
+    {id:"l3",type:"multi",q:"What are your biggest challenges when renting to foreign tenants?",opts:["Language barriers when explaining legal clauses","Waiting for their Italian documents (e.g. Codice Fiscale)","Wasting time sending contract drafts back and forth","No particular difficulties","I do not rent to foreigners"]},
+    {id:"l4",type:"choice",q:"Imagine a new official system on the Agenzia delle Entrate website — a 'live' digital contract filled out online, with official translations. What level of collaboration would you prefer with the tenant?",opts:["Total Control: I fill out everything; the tenant can only read and sign","Partial Collaboration: The tenant inputs their personal details only; I decide the rest","Total Collaboration: We can edit clauses and terms together online"]},
+    {id:"l5",type:"choice",q:"If the system automatically registered the contract and calculated taxes immediately after electronic signature (SPID), would you trust it?",opts:["Yes, absolutely — it would be very convenient","Yes, but ONLY if it shows a clear visual summary of the calculation before I confirm","No, I prefer to have a human (my accountant) check the numbers"]},
+    {id:"l6",type:"multi",q:"What feature would make you feel 'safe' from making mistakes while filling out the contract?",opts:["A built-in glossary that explains difficult tax terms in simple words","A 'Test Simulation' to see the final result before actual submission","A Step-by-Step guide (Wizard) that asks one simple question at a time","Live chat or human support"]},
+    {id:"l7",type:"choice",q:"Would you support an 'Official Rating' system on the tax portal, where you can leave feedback about the tenant (and vice versa) at the end of the contract?",opts:["Yes — it would help me avoid bad or non-paying tenants","Yes, but ratings must be based on objective data (e.g. paid rent on time), not just opinions","No — I fear it would cause privacy issues or revenge ratings","I am not interested"]},
+    {id:"l8",type:"open",q:"If you had a magic wand, what ONE dream feature would you add to the official rental tax website?",hint:"Optional — feel free to skip if nothing comes to mind."}
   ]
 },
 zh:{
@@ -338,6 +339,12 @@ function showQ(){
   } else if(q.type==="choice"){
     const cur=answers[q.id]||"";
     body=`<div class="choices">${q.opts.map(o=>`<button class="choice${cur===o?" sel":""}" onclick="setChoice('${q.id}','${o.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}',this)"><span class="dot"></span>${o}</button>`).join("")}</div>${q.follow_open?`<div class="followup${cur?" show":""}" id="fu" style="margin-top:14px"><p class="fu-label">${t.why_label}</p><textarea id="fu_ta" placeholder="...">${answers[q.id+"_why"]||""}</textarea></div>`:""}`;
+  } else if(q.type==="multi"){
+    const cur=answers[q.id]?answers[q.id].split("|||"):[];
+    body=`<p class="q-hint" style="margin-bottom:12px">Select all that apply</p><div class="choices">${q.opts.map(o=>{
+      const sel=cur.includes(o);
+      return `<button class="choice${sel?" sel":""}" style="border-radius:10px" onclick="toggleMulti('${q.id}','${o.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}',this)"><span class="dot" style="border-radius:3px"></span>${o}</button>`;
+    }).join("")}</div>`;
   }
 
   render(`<div class="chip">${qIdx+1} / ${total}</div><p class="q-label">${q.q}</p>${body}<div class="nav"><button class="btn-back" onclick="goBack()">${t.back}</button><button class="btn-next" onclick="goNext()">${isLast?t.submit:t.next}</button></div>`,p);
@@ -357,14 +364,21 @@ function setChoice(id,val,el){
   const fu=document.getElementById("fu");
   if(fu)fu.classList.add("show");
 }
+function toggleMulti(id,val,el){
+  let cur=answers[id]?answers[id].split("|||"):[];
+  if(cur.includes(val)){cur=cur.filter(v=>v!==val);el.classList.remove("sel");}
+  else{cur.push(val);el.classList.add("sel");}
+  answers[id]=cur.join("|||");
+}
 function goNext(){
   const qs=getQs(),q=qs[qIdx],t=T[lang];
   const ta=document.getElementById("ta");
   if(ta)answers[q.id]=ta.value;
   const futa=document.getElementById("fu_ta");
   if(futa)answers[q.id+"_why"]=futa.value;
-  if(q.type==="open"&&!answers[q.id]?.trim()){alert(t.req);return;}
+  if(q.type==="open"&&q.id!=="l8"&&!answers[q.id]?.trim()){alert(t.req);return;}
   if((q.type==="yesno"||q.type==="choice")&&!answers[q.id]){alert(t.req);return;}
+  if(q.type==="multi"&&!answers[q.id]){alert(t.req);return;}
   qIdx++;showQ();
 }
 function goBack(){if(qIdx===0){showDemo();return;}qIdx--;showQ();}
