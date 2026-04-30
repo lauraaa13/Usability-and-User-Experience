@@ -19,6 +19,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;disp
 @keyframes sIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes sOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-10px)}}
 .chip{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--pale);border-radius:20px;padding:4px 10px;margin-bottom:14px;}
+.section-chip{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--border);border-radius:20px;padding:3px 9px;margin-bottom:10px;}
 h1{font-family:'Fraunces',serif;font-weight:600;font-size:1.65rem;color:var(--ink);line-height:1.18;margin-bottom:8px;}
 .sub{font-size:.875rem;color:var(--muted);line-height:1.55;margin-bottom:24px;}
 .lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
@@ -39,15 +40,18 @@ h1{font-family:'Fraunces',serif;font-weight:600;font-size:1.65rem;color:var(--in
 input[type=text],input[type=number]{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--ink);background:white;-webkit-appearance:none;transition:border-color .15s;}
 input:focus{outline:none;border-color:#2a5fa8;}
 .q-label{font-size:1.05rem;font-weight:500;color:var(--ink);line-height:1.5;margin-bottom:8px;}
-.q-hint{font-size:.8rem;color:var(--muted);margin-bottom:18px;line-height:1.45;font-style:italic;}
-textarea{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);background:white;resize:none;min-height:110px;line-height:1.55;transition:border-color .15s;}
+.q-hint{font-size:.8rem;color:var(--muted);margin-bottom:16px;line-height:1.45;font-style:italic;}
+textarea{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);background:white;resize:none;min-height:90px;line-height:1.55;transition:border-color .15s;}
 textarea:focus{outline:none;border-color:#2a5fa8;}
 .choices{display:flex;flex-direction:column;gap:9px;}
-.choice{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);text-align:left;transition:all .14s;width:100%;line-height:1.4;}
+.choice{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1.5px solid var(--border);border-radius:12px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--ink);text-align:left;transition:all .14s;width:100%;line-height:1.4;}
 .choice:active,.choice:hover{border-color:var(--accent);background:var(--pale);}
 .choice.sel{border-color:var(--accent);background:var(--pale);color:var(--accent);font-weight:500;}
 .dot{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;transition:all .14s;}
+.sq{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;transition:all .14s;}
 .choice.sel .dot{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px white;}
+.choice.sel .sq{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px white;}
+.multi-hint{font-size:.75rem;color:var(--muted);margin-bottom:12px;font-style:italic;}
 .yesno{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .yn{padding:16px;border:1.5px solid var(--border);border-radius:14px;background:white;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;color:var(--muted);text-align:center;transition:all .14s;}
 .yn:active,.yn:hover{border-color:var(--accent);background:var(--pale);}
@@ -86,25 +90,26 @@ it:{
   demo_title:"Prima di iniziare",demo_sub:"Queste informazioni ci aiutano a capire chi sono i nostri utenti.",
   f_age:"Età",f_nat:"Nazionalità",ph_age:"es. 27",ph_nat:"es. Cina",
   next:"Avanti →",back:"← Indietro",submit:"Invia le risposte",
-  req:"Rispondi prima di continuare.",why_label:"Puoi spiegare brevemente?",
+  req:"Rispondi prima di continuare.",why_label:"Puoi spiegare brevemente?",multi_hint:"Seleziona tutte le opzioni che si applicano",
   ty_title:"Grazie mille!",ty_msg:"Le tue risposte ci aiutano a progettare un sistema più accessibile per tutti.",
   yes:"Sì",no:"No",
   tqs:[
-    {id:"t1",type:"open",q:"Che problemi o ostacoli specifici hai incontrato durante il processo di affitto?",hint:"es. carenza di case, barriere linguistiche, comunicazione lenta, burocrazia..."},
+    {id:"t1",type:"choice",q:"Ripensando alla tua ricerca casa, qual è stato il momento più difficile?",opts:["Trovare un alloggio disponibile","Capire il contratto e i termini legali","Comunicare con il proprietario","Gestire la burocrazia e i documenti","Aspettare risposte o decisioni","Altro"]},
     {id:"t2",type:"yesno",q:"Hai mai avuto bisogno o intenzione di modificare clausole specifiche del tuo contratto d'affitto?",follow:"Cosa volevi cambiare, e come è andata?"},
-    {id:"t3",type:"yesno",q:"Hai avuto problemi di comunicazione con il tuo proprietario riguardo al contratto?",follow:"Puoi descrivere la situazione? (es. lingua, tempi, chiarezza dei termini)"},
-    {id:"t4",type:"open",q:"Quanto tempo ha richiesto in genere l'intero processo di modifica e finalizzazione di un contratto?",hint:"Includi comunicazione, attesa di documenti, firma, registrazione..."},
-    {id:"t5",type:"choice",q:"Come ti sentiresti rispetto a un sistema di valutazione dei proprietari su questa piattaforma?",opts:["Lo userei per controllare la reputazione prima di firmare","Lo userei per lasciare un feedback dopo","Lo userei per entrambe le cose","Non mi interessa / Non lo userei"],follow_open:"C'è qualcosa che ti farebbe sentire a disagio con questo sistema?"}
+    {id:"t3",type:"yesno",q:"Hai avuto problemi di comunicazione con il tuo proprietario riguardo al contratto?",follow:"Puoi descrivere brevemente la situazione?"},
+    {id:"t4",type:"choice",q:"Quanto tempo ha richiesto in genere il processo di modifica o finalizzazione di un contratto?",opts:["Meno di 1 settimana","1–2 settimane","2–4 settimane","Più di 1 mese","Non ho mai dovuto modificare un contratto"]},
+    {id:"t5",type:"yesno",q:"Pensi che avere un 'Profilo Verificato' (identità e stabilità finanziaria pre-controllate) cambierebbe il modo in cui i proprietari rispondono alle tue richieste?",follow:"Perché? Che differenza pensi farebbe?"},
+    {id:"t6",type:"choice",q:"Useresti un sistema di valutazione dei proprietari su questa piattaforma?",opts:["Sì, per controllare la reputazione prima di firmare","Sì, per lasciare un feedback dopo","Sì, per entrambe le cose","No, non mi interessa"]}
   ],
   lqs:[
-    {id:"l1",type:"open",q:"Come hai preparato il tuo ultimo contratto d'affitto, e perché hai scelto quel metodo?",hint:"es. modello scaricato da solo, agenzia, CAF, commercialista, amico esperto..."},
-    {id:"l2",type:"open",q:"Quando affitti a inquilini stranieri, quali sono i principali colli di bottiglia?",hint:"es. attesa del Codice Fiscale, barriere linguistiche, revisione di bozze tradotte, correzioni ripetute..."},
-    {id:"l3",type:"open",q:"Conosci il sistema RLI ufficiale dell'Agenzia delle Entrate? Registri i contratti da solo o paghi qualcuno? Qual è la parte più frustrante e quanto ti costa?",hint:"Sii onesto/a — vogliamo capire la realtà, non la procedura ideale."},
-    {id:"l4",type:"open",q:"Immagina un contratto \"live\" ufficiale: compila automaticamente i dati, fornisce traduzioni e permette a te e all'inquilino di revisionarlo insieme online. Che vantaggi e rischi vedi? Cosa dovrebbe poter modificare l'inquilino? Quale modalità preferiresti?",hint:"Controllo totale del proprietario / collaborazione parziale / collaborazione paritaria"},
-    {id:"l5",type:"open",q:"Se il sistema registrasse automaticamente il contratto e calcolasse le tasse subito dopo la firma digitale — lo useresti? Cosa dovresti vedere sullo schermo per fidarti completamente del calcolo?"},
-    {id:"l6",type:"choice",q:"Fare un errore sul sito fiscale può comportare sanzioni. Che tipo di funzione ti farebbe sentire sicuro/a durante la compilazione?",opts:["Un glossario per i termini complessi","Una simulazione di prova prima dell'invio reale","Un riepilogo visivo prima di confermare","Un supporto chat in tempo reale","Tutte le precedenti"]},
-    {id:"l7",type:"open",q:"Se potessi aggiungere una sola funzione ideale al sito ufficiale degli affitti, quale sarebbe?"},
-    {id:"l8",type:"yesno",q:"Ti sentiresti a tuo agio con un sistema di recensioni reciproche (proprietario ↔ inquilino) visibili ai futuri utenti?",follow:"Ci sono aspetti che ti preoccupano?"}
+    {id:"l1",type:"choice",q:"Come prepari solitamente il testo dei tuoi contratti d'affitto?",opts:["Scarico un modello da internet e lo faccio da solo","Mi affido a un'agenzia immobiliare","Il mio commercialista o il CAF gestisce tutto","Uso un vecchio contratto e cambio solo i nomi"]},
+    {id:"l2",type:"choice",q:"Qual è il motivo principale per cui deleghi o hai difficoltà con il sito RLI dell'Agenzia delle Entrate?",opts:["Ho paura di fare errori e ricevere sanzioni","Il sito è troppo complicato / il linguaggio è troppo burocratico","Non ho tempo da perdere","Lo faccio già da solo senza problemi","Altro"],follow_open:"Se altro, specifica:"},
+    {id:"l3",type:"multi",q:"Quali sono le principali difficoltà quando affitti a inquilini stranieri?",opts:["Barriere linguistiche nello spiegare le clausole legali","Attesa dei documenti italiani (es. Codice Fiscale)","Perdita di tempo con bozze di contratto avanti e indietro","Nessuna difficoltà particolare","Non affitto a stranieri"]},
+    {id:"l4",type:"choice",q:"Immagina un contratto 'live' ufficiale sul sito fiscale, compilabile online con traduzioni ufficiali. Che livello di collaborazione preferiresti con l'inquilino?",opts:["Controllo totale: compilo tutto io, l'inquilino può solo leggere e firmare","Collaborazione parziale: l'inquilino inserisce solo i suoi dati personali","Collaborazione totale: possiamo modificare clausole e termini insieme"]},
+    {id:"l5",type:"choice",q:"Se il sistema registrasse automaticamente il contratto e calcolasse le tasse subito dopo la firma digitale (SPID), ti fideresti?",opts:["Sì, assolutamente — sarebbe molto comodo","Sì, ma SOLO se mostra un riepilogo visivo chiaro prima di confermare","No, preferisco che un commercialista controlli i numeri"]},
+    {id:"l6",type:"multi",q:"Quale funzione ti farebbe sentire 'al sicuro' dagli errori durante la compilazione del contratto?",opts:["Un glossario integrato che spiega i termini fiscali difficili in parole semplici","Una 'Simulazione di prova' per vedere il risultato prima dell'invio reale","Una guida passo-passo (Wizard) che fa una domanda semplice alla volta","Supporto chat o assistenza umana in tempo reale"]},
+    {id:"l7",type:"choice",q:"Supporteresti un sistema di 'Valutazione Ufficiale' sul portale fiscale, in cui puoi lasciare un feedback sull'inquilino (e viceversa) alla fine del contratto?",opts:["Sì — mi aiuterebbe a evitare inquilini problematici","Sì, ma le valutazioni devono basarsi su dati oggettivi (es. ha pagato in tempo)","No — temo problemi di privacy o valutazioni di ritorsione","Non mi interessa"]},
+    {id:"l8",type:"open",q:"Se avessi una bacchetta magica, quale funzione aggiungeresti al sito ufficiale degli affitti?",hint:"Facoltativo — salta pure se non ti viene nulla in mente."}
   ]
 },
 en:{
@@ -115,26 +120,26 @@ en:{
   demo_title:"Before we start",demo_sub:"This helps us understand who our users are.",
   f_age:"Age",f_nat:"Nationality",ph_age:"e.g. 27",ph_nat:"e.g. China",
   next:"Next →",back:"← Back",submit:"Submit answers",
-  req:"Please answer before continuing.",why_label:"Can you briefly explain?",
+  req:"Please answer before continuing.",why_label:"Can you briefly explain?",multi_hint:"Select all that apply",
   ty_title:"Thank you!",ty_msg:"Your answers help us design a more accessible system for everyone.",
   yes:"Yes",no:"No",
   tqs:[
-    {id:"t1",type:"open",q:"Looking back at your entire house-hunting journey, which specific moment made you feel the most powerless or anxious?",hint:"e.g. housing shortage, language barrier, delayed communication..."},
+    {id:"t1",type:"choice",q:"Looking back at your house-hunting journey, which moment made you feel the most powerless or anxious?",opts:["Finding an available place","Understanding the contract and legal terms","Communicating with the landlord","Dealing with bureaucracy and documents","Waiting for responses or decisions","Other"]},
     {id:"t2",type:"yesno",q:"Have you ever had the intention or need to modify specific clauses in a rental contract?",follow:"What did you want to change, and how did it go?"},
-    {id:"t3",type:"yesno",q:"Have you experienced any communication issues or barriers when discussing contract terms with your landlord?",follow:"Can you describe the situation? (e.g. language, timing, clarity of terms)"},
-    {id:"t4",type:"open",q:"In your experience, how much time does the entire process of modifying and finalizing a contract typically take?",hint:"Include communication, waiting for documents, signing, registration..."},
-    {id:"t5",type:"yesno",q:"Do you feel that having a 'Verified Profile' (showing your identity and financial stability pre-checked) would change the way landlords treat your inquiries?",follow:"Why? What difference do you think it would make?"},
-    {id:"t6",type:"yesno",q:"How would you feel if there were a rating system for landlords within this platform? Would you actually use such a feature — either to check a landlord's reputation or to leave your own feedback?",follow:"Why? Would anything make you uncomfortable about this system?"}
+    {id:"t3",type:"yesno",q:"Have you experienced any communication issues or barriers when discussing contract terms with your landlord?",follow:"Can you briefly describe the situation?"},
+    {id:"t4",type:"choice",q:"How much time does the process of modifying or finalizing a contract typically take?",opts:["Less than 1 week","1–2 weeks","2–4 weeks","More than 1 month","I have never had to modify a contract"]},
+    {id:"t5",type:"yesno",q:"Do you feel that having a 'Verified Profile' (identity and financial stability pre-checked) would change the way landlords respond to your inquiries?",follow:"Why? What difference do you think it would make?"},
+    {id:"t6",type:"choice",q:"Would you use a landlord rating system on this platform?",opts:["Yes, to check reputation before signing","Yes, to leave feedback after","Yes, for both","No, not interested"]}
   ],
   lqs:[
     {id:"l1",type:"choice",q:"How do you usually prepare the text for your rental contracts?",opts:["I download a template from the internet and do it myself","I rely on a real estate agency","My accountant (commercialista) or CAF handles it","I use an old contract and just change the names"]},
     {id:"l2",type:"choice",q:"What is the main reason you delegate or struggle with the Agenzia delle Entrate (RLI) website?",opts:["I am afraid of making mistakes and getting fined","The website is too complicated / the language is too bureaucratic","I don't have time to waste on it","I already do it myself without any problems","Other"],follow_open:"If other, please specify:"},
     {id:"l3",type:"multi",q:"What are your biggest challenges when renting to foreign tenants?",opts:["Language barriers when explaining legal clauses","Waiting for their Italian documents (e.g. Codice Fiscale)","Wasting time sending contract drafts back and forth","No particular difficulties","I do not rent to foreigners"]},
-    {id:"l4",type:"choice",q:"Imagine a new official system on the Agenzia delle Entrate website — a 'live' digital contract filled out online, with official translations. What level of collaboration would you prefer with the tenant?",opts:["Total Control: I fill out everything; the tenant can only read and sign","Partial Collaboration: The tenant inputs their personal details only; I decide the rest","Total Collaboration: We can edit clauses and terms together online"]},
-    {id:"l5",type:"choice",q:"If the system automatically registered the contract and calculated taxes immediately after electronic signature (SPID), would you trust it?",opts:["Yes, absolutely — it would be very convenient","Yes, but ONLY if it shows a clear visual summary of the calculation before I confirm","No, I prefer to have a human (my accountant) check the numbers"]},
-    {id:"l6",type:"multi",q:"What feature would make you feel 'safe' from making mistakes while filling out the contract?",opts:["A built-in glossary that explains difficult tax terms in simple words","A 'Test Simulation' to see the final result before actual submission","A Step-by-Step guide (Wizard) that asks one simple question at a time","Live chat or human support"]},
-    {id:"l7",type:"choice",q:"Would you support an 'Official Rating' system on the tax portal, where you can leave feedback about the tenant (and vice versa) at the end of the contract?",opts:["Yes — it would help me avoid bad or non-paying tenants","Yes, but ratings must be based on objective data (e.g. paid rent on time), not just opinions","No — I fear it would cause privacy issues or revenge ratings","I am not interested"]},
-    {id:"l8",type:"open",q:"If you had a magic wand, what ONE dream feature would you add to the official rental tax website?",hint:"Optional — feel free to skip if nothing comes to mind."}
+    {id:"l4",type:"choice",q:"Imagine an official 'live' contract on the tax website, filled out online with official translations. What level of collaboration would you prefer with the tenant?",opts:["Total Control: I fill out everything; the tenant can only read and sign","Partial Collaboration: The tenant inputs their personal details only; I decide the rest","Total Collaboration: We can edit clauses and terms together online"]},
+    {id:"l5",type:"choice",q:"If the system automatically registered the contract and calculated taxes immediately after electronic signature (SPID), would you trust it?",opts:["Yes, absolutely — it would be very convenient","Yes, but ONLY if it shows a clear visual summary before I confirm","No, I prefer to have a human (my accountant) check the numbers"]},
+    {id:"l6",type:"multi",q:"What feature would make you feel 'safe' from making mistakes while filling out the contract?",opts:["A built-in glossary explaining difficult tax terms in simple words","A 'Test Simulation' to see the final result before actual submission","A Step-by-Step guide (Wizard) that asks one simple question at a time","Live chat or human support"]},
+    {id:"l7",type:"choice",q:"Would you support an 'Official Rating' system on the tax portal, where you can leave feedback about the tenant (and vice versa) at the end of the contract?",opts:["Yes — it would help me avoid bad or non-paying tenants","Yes, but ratings must be based on objective data (e.g. paid rent on time)","No — I fear privacy issues or revenge ratings","Not interested"]},
+    {id:"l8",type:"open",q:"If you had a magic wand, what ONE dream feature would you add to the official rental tax website?",hint:"Optional — feel free to skip."}
   ]
 },
 zh:{
@@ -145,25 +150,26 @@ zh:{
   demo_title:"开始之前",demo_sub:"这些信息帮助我们了解用户群体。",
   f_age:"年龄",f_nat:"国籍",ph_age:"例如：27",ph_nat:"例如：中国",
   next:"下一步 →",back:"← 返回",submit:"提交答案",
-  req:"请在继续之前回答此问题。",why_label:"您能简单解释一下吗？",
+  req:"请在继续之前回答此问题。",why_label:"您能简单解释一下吗？",multi_hint:"请选择所有适用选项",
   ty_title:"非常感谢！",ty_msg:"您的回答有助于我们为所有人设计更便捷的系统。",
   yes:"是",no:"否",
   tqs:[
-    {id:"t1",type:"open",q:"在租房过程中，您遇到了哪些具体问题或障碍？",hint:"例如：房源紧缺、语言障碍、沟通延迟、繁琐的官僚程序..."},
+    {id:"t1",type:"choice",q:"回顾您的整个找房经历，哪个时刻让您感到最无助或焦虑？",opts:["找到可租的房源","理解合同和法律条款","与房东沟通","处理繁琐的手续和文件","等待回复或决定","其他"]},
     {id:"t2",type:"yesno",q:"您是否曾有过修改租房合同中特定条款的需求或意向？",follow:"您想修改什么内容？结果如何？"},
-    {id:"t3",type:"yesno",q:"您在与房东讨论合同条款时，是否遇到过沟通问题或障碍？",follow:"您能描述一下当时的情况吗？（例如：语言、时间、条款清晰度）"},
-    {id:"t4",type:"open",q:"根据您的经验，修改并最终确定合同的整个过程通常需要多长时间？",hint:"包括沟通、等待文件、签署、登记注册..."},
-    {id:"t5",type:"choice",q:"如果该平台有房东评价系统，您会有什么看法？",opts:["我会在签约前用它查看房东信誉","我会在租约结束后用它留下评价","两者我都会使用","我不感兴趣 / 不会使用"],follow_open:"这个系统有没有让您感到不舒适的地方？"}
+    {id:"t3",type:"yesno",q:"您在与房东讨论合同条款时，是否遇到过沟通问题或障碍？",follow:"您能简单描述一下情况吗？"},
+    {id:"t4",type:"choice",q:"修改或最终确定合同的过程通常需要多长时间？",opts:["不到1周","1–2周","2–4周","超过1个月","我从未需要修改合同"]},
+    {id:"t5",type:"yesno",q:"您认为拥有一个\"已验证档案\"（预先核实身份和财务稳定性）会改变房东回应您询问的方式吗？",follow:"为什么？您认为会有什么不同？"},
+    {id:"t6",type:"choice",q:"您会使用该平台上的房东评价系统吗？",opts:["会，签约前查看房东信誉","会，租约结束后留下评价","会，两者都用","不会，不感兴趣"]}
   ],
   lqs:[
-    {id:"l1",type:"open",q:"您是如何准备上一份租房合同的？为什么选择这种方式？",hint:"例如：自己下载模板、使用中介/CAF、会计师、熟悉流程的朋友..."},
-    {id:"l2",type:"open",q:"在向外国租客出租时，主要的瓶颈问题是什么？",hint:"例如：等待税号(Codice Fiscale)、语言障碍、审查翻译草稿、反复修改..."},
-    {id:"l3",type:"open",q:"您熟悉意大利税务局(Agenzia delle Entrate)的官方RLI系统吗？您自己登记合同还是付费给他人？最令您头疼的是什么？花费多少？",hint:"请如实回答——我们想了解实际情况，而非理想流程。"},
-    {id:"l4",type:"open",q:"想象税务网站上有一份官方\"实时\"合同：自动填写双方信息、提供官方翻译，并允许您和租客在线共同审阅填写。您认为有哪些好处和风险？租客应被允许修改什么？您更倾向于哪种合作模式？",hint:"房东完全控制 / 部分协作 / 平等协作"},
-    {id:"l5",type:"open",q:"如果双方电子签名后，系统能自动完成合同登记并立即计算税款——您会使用吗？您需要在屏幕上看到哪些信息才能完全信任系统？"},
-    {id:"l6",type:"choice",q:"在税务网站上犯错可能导致罚款。在填写合同时，哪种引导功能会让您感到安心？",opts:["复杂术语词汇表","正式提交前的模拟测试","确认前的可视化摘要","实时在线客服支持","以上全部"]},
-    {id:"l7",type:"open",q:"如果您可以为官方租房网站添加一个\"魔法\"功能，您希望它是什么？"},
-    {id:"l8",type:"yesno",q:"如果您可以在租约结束后对租客留下评价，租客也可以对您留下评价，且这些信息对未来用户可见——您会接受吗？",follow:"有没有让您担心的方面？"}
+    {id:"l1",type:"choice",q:"您通常如何准备租房合同的内容？",opts:["自己从网上下载模板","委托房产中介处理","由会计师或CAF全权处理","沿用旧合同，只更改姓名"]},
+    {id:"l2",type:"choice",q:"您委托他人或在使用税务局RLI网站时遇到困难的主要原因是什么？",opts:["担心出错并被罚款","网站太复杂，语言太官僚化","没有时间处理","我自己已经能顺利操作","其他"],follow_open:"如选其他，请说明："},
+    {id:"l3",type:"multi",q:"向外国租客出租时，您面临的最大挑战是什么？",opts:["解释法律条款时的语言障碍","等待对方的意大利证件（如税号）","来回发送合同草稿浪费时间","没有特别困难","我不向外国人出租"]},
+    {id:"l4",type:"choice",q:"想象税务网站上有一份官方【实时】合同，可在线填写并附有官方翻译。您希望与租客保持何种合作方式？",opts:["完全控制：由我填写所有内容，租客只能阅读和签署","部分协作：租客只填写个人身份信息，其余由我决定","完全协作：我们可以在线共同修改条款"]},
+    {id:"l5",type:"choice",q:"如果系统在双方电子签名（SPID）后立即自动登记合同并计算税款，您是否信任它？",opts:["完全信任——非常方便","信任，但前提是确认前显示清晰的可视化摘要","不信任，我更希望会计师核实数据"]},
+    {id:"l6",type:"multi",q:"哪项功能能让您在填写合同时感到【安全】，避免出错？",opts:["内置词汇表，用简单语言解释复杂税务术语","正式提交前的【模拟测试】，预览最终结果","逐步引导（向导）模式，每次只回答一个简单问题","实时在线客服或人工支持"]},
+    {id:"l7",type:"choice",q:"您是否支持在税务门户上设立【官方评价】系统，在合同结束时对租客留下反馈（反之亦然）？",opts:["支持——有助于避免不良租客","支持，但评价必须基于客观数据（如是否按时付租）","不支持——担心隐私问题或报复性评价","不感兴趣"]},
+    {id:"l8",type:"open",q:"如果您有一根魔法棒，您会为官方租房税务网站添加什么功能？",hint:"选填——如果没有想法可以跳过。"}
   ]
 },
 ar:{
@@ -174,25 +180,26 @@ ar:{
   demo_title:"قبل أن نبدأ",demo_sub:"تساعدنا هذه المعلومات على فهم مستخدمينا.",
   f_age:"العمر",f_nat:"الجنسية",ph_age:"مثال: 27",ph_nat:"مثال: مصر",
   next:"التالي →",back:"← رجوع",submit:"إرسال الإجابات",
-  req:"يرجى الإجابة قبل المتابعة.",why_label:"هل يمكنك الشرح باختصار؟",
+  req:"يرجى الإجابة قبل المتابعة.",why_label:"هل يمكنك الشرح باختصار؟",multi_hint:"اختر كل ما ينطبق",
   ty_title:"شكراً جزيلاً!",ty_msg:"تساعدنا إجاباتك في تصميم نظام أكثر سهولة للجميع.",
   yes:"نعم",no:"لا",
   tqs:[
-    {id:"t1",type:"open",q:"ما هي المشكلات أو العقبات المحددة التي واجهتها خلال عملية الإيجار؟",hint:"مثال: شُح الإسكان، الحاجز اللغوي، تأخر التواصل، البيروقراطية..."},
+    {id:"t1",type:"choice",q:"بالنظر إلى تجربة بحثك عن منزل، ما اللحظة التي شعرت فيها بالعجز أو القلق الأشد؟",opts:["إيجاد مسكن متاح","فهم العقد والشروط القانونية","التواصل مع المالك","التعامل مع الأوراق البيروقراطية","انتظار الردود أو القرارات","أخرى"]},
     {id:"t2",type:"yesno",q:"هل سبق أن احتجت أو أردت تعديل بنود محددة في عقد إيجار؟",follow:"ماذا أردت تغييره، وكيف سارت الأمور؟"},
-    {id:"t3",type:"yesno",q:"هل واجهت مشكلات في التواصل مع المالك بشأن شروط العقد؟",follow:"هل يمكنك وصف الموقف؟ (مثال: اللغة، التوقيت، وضوح الشروط)"},
-    {id:"t4",type:"open",q:"في تجربتك، كم يستغرق عادةً الإجراء الكامل لتعديل العقد وإتمامه؟",hint:"تضمّن التواصل، والانتظار للحصول على الوثائق، والتوقيع، والتسجيل..."},
-    {id:"t5",type:"choice",q:"كيف ستشعر حيال نظام تقييم للملاك على هذه المنصة؟",opts:["سأستخدمه للتحقق من السمعة قبل التوقيع","سأستخدمه لترك تقييم بعد انتهاء العقد","سأستخدمه للأمرين معاً","لست مهتماً / لن أستخدمه"],follow_open:"هل هناك جانب يجعلك غير مرتاح لهذا النظام؟"}
+    {id:"t3",type:"yesno",q:"هل واجهت مشكلات في التواصل مع المالك بشأن شروط العقد؟",follow:"هل يمكنك وصف الموقف باختصار؟"},
+    {id:"t4",type:"choice",q:"كم يستغرق عادةً إجراء تعديل العقد أو إتمامه؟",opts:["أقل من أسبوع","1–2 أسبوع","2–4 أسابيع","أكثر من شهر","لم أحتج قط لتعديل عقد"]},
+    {id:"t5",type:"yesno",q:"هل تعتقد أن امتلاك 'ملف موثق' (هوية واستقرار مالي مُتحقق منهما مسبقاً) سيغير طريقة استجابة الملاك لاستفساراتك؟",follow:"لماذا؟ ما الفرق الذي تتوقعه؟"},
+    {id:"t6",type:"choice",q:"هل ستستخدم نظام تقييم للملاك على هذه المنصة؟",opts:["نعم، للتحقق من السمعة قبل التوقيع","نعم، لترك تقييم بعد انتهاء العقد","نعم، للأمرين معاً","لا، لست مهتماً"]}
   ],
   lqs:[
-    {id:"l1",type:"open",q:"كيف أعددت آخر عقد إيجار لديك، ولماذا اخترت هذه الطريقة؟",hint:"مثال: تنزيل نموذج بنفسك، وكالة/CAF، محاسب، صديق خبير..."},
-    {id:"l2",type:"open",q:"عند تأجير العقارات للمستأجرين الأجانب، ما هي أبرز العقبات؟",hint:"مثال: انتظار رقم الضريبة، الحواجز اللغوية، مراجعة المسودات المترجمة..."},
-    {id:"l3",type:"open",q:"هل تعرف نظام RLI الرسمي لوكالة الإيرادات؟ هل تسجّل العقود بنفسك أم تدفع لشخص آخر؟ ما أكثر جانب محبط وكم يكلفك؟",hint:"كن صريحاً — نريد فهم الواقع، لا الإجراء المثالي."},
-    {id:"l4",type:"open",q:"تخيّل عقداً رسمياً \"مباشراً\" على الموقع الضريبي يملأ البيانات تلقائياً، ويوفر ترجمات، ويتيح لك وللمستأجر مراجعته معاً. ما المزايا والمخاطر؟ ما الذي يُسمح للمستأجر بتعديله؟ أي نمط تفضّل؟",hint:"سيطرة كاملة للمالك / تعاون جزئي / تعاون متساوٍ"},
-    {id:"l5",type:"open",q:"إذا سجّل النظام العقد تلقائياً وحسب ضرائبك فور توقيع الطرفين — هل ستستخدمه؟ ما التفاصيل التي تحتاج رؤيتها لتثق بالحساب الآلي؟"},
-    {id:"l6",type:"choice",q:"الخطأ على الموقع الضريبي قد يؤدي إلى غرامات. أي ميزة إرشادية ستجعلك تشعر بالأمان؟",opts:["قاموس للمصطلحات المعقدة","محاكاة تجريبية قبل الإرسال الفعلي","ملخص مرئي قبل التأكيد","دعم دردشة مباشر","جميع ما سبق"]},
-    {id:"l7",type:"open",q:"لو كان بإمكانك إضافة ميزة واحدة مثالية للموقع الرسمي، ماذا ستختار؟"},
-    {id:"l8",type:"yesno",q:"هل ستكون مرتاحاً لنظام تقييمات متبادلة (مالك ↔ مستأجر) مرئية للمستخدمين المستقبليين؟",follow:"هل هناك جوانب تقلقك؟"}
+    {id:"l1",type:"choice",q:"كيف تُعِدّ عادةً نص عقود الإيجار الخاصة بك؟",opts:["أُنزّل نموذجاً من الإنترنت وأتولى الأمر بنفسي","أعتمد على وكالة عقارية","يتولى محاسبي أو CAF كل شيء","أستخدم عقداً قديماً وأغيّر الأسماء فقط"]},
+    {id:"l2",type:"choice",q:"ما السبب الرئيسي الذي يجعلك تُفوّض المهمة أو تجد صعوبة في استخدام موقع RLI؟",opts:["أخشى ارتكاب أخطاء والتعرض لغرامات","الموقع معقد جداً / اللغة بيروقراطية للغاية","ليس لدي وقت لأضيعه","أتعامل معه بنفسي بلا مشاكل","أخرى"],follow_open:"إن اخترت أخرى، يرجى التوضيح:"},
+    {id:"l3",type:"multi",q:"ما أكبر التحديات عند تأجير عقارك للمستأجرين الأجانب؟",opts:["الحواجز اللغوية عند شرح البنود القانونية","انتظار وثائقهم الإيطالية (مثل رقم الضريبة)","إضاعة الوقت في إرسال مسودات العقد ذهاباً وإياباً","لا توجد صعوبات خاصة","لا أؤجر للأجانب"]},
+    {id:"l4",type:"choice",q:"تخيّل عقداً رسمياً 'مباشراً' على الموقع الضريبي يُملأ إلكترونياً مع ترجمات رسمية. أي مستوى من التعاون تفضّل مع المستأجر؟",opts:["تحكم كامل: أملأ كل شيء؛ المستأجر يقرأ ويوقع فقط","تعاون جزئي: المستأجر يُدخل بياناته الشخصية فقط؛ أنا أقرر الباقي","تعاون كامل: نعدّل البنود والشروط معاً عبر الإنترنت"]},
+    {id:"l5",type:"choice",q:"إذا سجّل النظام العقد تلقائياً وحسب الضرائب فور توقيع الطرفين إلكترونياً (SPID)، هل ستثق به؟",opts:["نعم تماماً — سيكون مريحاً جداً","نعم، لكن فقط إذا أظهر ملخصاً مرئياً واضحاً قبل التأكيد","لا، أفضّل أن يراجع المحاسب الأرقام"]},
+    {id:"l6",type:"multi",q:"ما الميزة التي ستجعلك تشعر بالأمان من الأخطاء أثناء تعبئة العقد؟",opts:["قاموس مدمج يشرح المصطلحات الضريبية الصعبة بلغة بسيطة","'محاكاة تجريبية' لرؤية النتيجة النهائية قبل الإرسال الفعلي","دليل خطوة بخطوة يطرح سؤالاً بسيطاً واحداً في كل مرة","دعم دردشة مباشر أو مساعدة بشرية"]},
+    {id:"l7",type:"choice",q:"هل ستدعم نظام 'تقييم رسمي' على البوابة الضريبية يتيح لك ترك ملاحظات عن المستأجر (والعكس) في نهاية العقد؟",opts:["نعم — سيساعدني على تجنب المستأجرين السيئين","نعم، لكن يجب أن تستند التقييمات إلى بيانات موضوعية","لا — أخشى مشاكل الخصوصية أو تقييمات الانتقام","لست مهتماً"]},
+    {id:"l8",type:"open",q:"لو كانت بيدك عصا سحرية، ما الميزة التي ستضيفها إلى موقع الإيجار الرسمي؟",hint:"اختياري — يمكنك تخطيه إن لم يتبادر إلى ذهنك شيء."}
   ]
 },
 ur:{
@@ -203,25 +210,26 @@ ur:{
   demo_title:"شروع کرنے سے پہلے",demo_sub:"یہ معلومات ہمیں اپنے صارفین کو سمجھنے میں مدد دیتی ہیں۔",
   f_age:"عمر",f_nat:"قومیت",ph_age:"مثال: 27",ph_nat:"مثال: پاکستان",
   next:"اگلا →",back:"← پیچھے",submit:"جوابات جمع کریں",
-  req:"جاری رکھنے سے پہلے جواب دیں۔",why_label:"کیا آپ مختصراً وضاحت کر سکتے ہیں؟",
+  req:"جاری رکھنے سے پہلے جواب دیں۔",why_label:"کیا آپ مختصراً وضاحت کر سکتے ہیں؟",multi_hint:"تمام متعلقہ آپشن منتخب کریں",
   ty_title:"بہت شکریہ!",ty_msg:"آپ کے جوابات ہمیں سب کے لیے ایک زیادہ قابل رسائی نظام ڈیزائن کرنے میں مدد دیتے ہیں۔",
   yes:"ہاں",no:"نہیں",
   tqs:[
-    {id:"t1",type:"open",q:"کرایہ کے عمل کے دوران آپ کو کن مخصوص مسائل یا رکاوٹوں کا سامنا ہوا؟",hint:"مثلاً: گھروں کی قلت، زبان کی رکاوٹ، سست مواصلات، سرکاری کاغذ بازی..."},
+    {id:"t1",type:"choice",q:"اپنے گھر تلاش کرنے کے سفر کو یاد کریں — کون سا لمحہ سب سے زیادہ بے بس یا پریشان کن تھا؟",opts:["دستیاب مکان تلاش کرنا","کرایہ نامے اور قانونی شرائط سمجھنا","مالک مکان سے رابطہ کرنا","کاغذی کارروائی سنبھالنا","جوابات یا فیصلوں کا انتظار","دیگر"]},
     {id:"t2",type:"yesno",q:"کیا آپ نے کبھی کرایہ نامے میں مخصوص شقوں کو تبدیل کرنے کی ضرورت یا ارادہ محسوس کیا؟",follow:"آپ کیا بدلنا چاہتے تھے، اور نتیجہ کیا رہا؟"},
-    {id:"t3",type:"yesno",q:"کیا آپ کو اپنے مالک مکان کے ساتھ کرایہ نامے کی شرائط پر بات کرتے وقت مواصلاتی مسائل کا سامنا ہوا؟",follow:"کیا آپ صورتحال بیان کر سکتے ہیں؟ (مثلاً: زبان، وقت، شرائط کی وضاحت)"},
-    {id:"t4",type:"open",q:"آپ کے تجربے میں، کرایہ نامے میں ترمیم اور اسے حتمی شکل دینے میں عموماً کتنا وقت لگتا ہے؟",hint:"مواصلات، دستاویزات کا انتظار، دستخط، اندراج سب شامل کریں..."},
-    {id:"t5",type:"choice",q:"اس پلیٹ فارم پر مالکوں کے لیے ریٹنگ سسٹم کے بارے میں آپ کیا سوچتے ہیں؟",opts:["دستخط سے پہلے مالک کی ساکھ جانچنے کے لیے استعمال کروں گا","بعد میں رائے دینے کے لیے استعمال کروں گا","دونوں مقاصد کے لیے","مجھے دلچسپی نہیں / استعمال نہیں کروں گا"],follow_open:"کیا اس نظام میں کوئی چیز آپ کو بے چین کرتی ہے؟"}
+    {id:"t3",type:"yesno",q:"کیا آپ کو اپنے مالک مکان کے ساتھ کرایہ نامے کی شرائط پر بات کرتے وقت مواصلاتی مسائل کا سامنا ہوا؟",follow:"کیا آپ مختصراً صورتحال بیان کر سکتے ہیں؟"},
+    {id:"t4",type:"choice",q:"کرایہ نامے میں ترمیم یا اسے حتمی شکل دینے میں عموماً کتنا وقت لگتا ہے؟",opts:["1 ہفتے سے کم","1–2 ہفتے","2–4 ہفتے","1 مہینے سے زیادہ","مجھے کبھی کرایہ نامہ تبدیل نہیں کرنا پڑا"]},
+    {id:"t5",type:"yesno",q:"کیا آپ کو لگتا ہے کہ 'تصدیق شدہ پروفائل' (پہلے سے تصدیق شدہ شناخت اور مالی استحکام) مالکوں کے آپ کے ساتھ رویے کو بدل دے گا؟",follow:"کیوں؟ آپ کے خیال میں کیا فرق پڑے گا؟"},
+    {id:"t6",type:"choice",q:"کیا آپ اس پلیٹ فارم پر مالکوں کے لیے ریٹنگ سسٹم استعمال کریں گے؟",opts:["ہاں، دستخط سے پہلے ساکھ جانچنے کے لیے","ہاں، بعد میں رائے دینے کے لیے","ہاں، دونوں کے لیے","نہیں، دلچسپی نہیں"]}
   ],
   lqs:[
-    {id:"l1",type:"open",q:"آپ نے اپنا آخری کرایہ نامہ کیسے تیار کیا، اور آپ نے یہ طریقہ کیوں چنا؟",hint:"مثلاً: خود ٹیمپلیٹ ڈاؤن لوڈ کیا، ایجنسی/CAF، اکاؤنٹنٹ، تجربہ کار دوست..."},
-    {id:"l2",type:"open",q:"غیر ملکی کرایہ داروں کو کرایہ دیتے وقت، بنیادی رکاوٹیں کیا ہیں؟",hint:"مثلاً: ٹیکس نمبر کا انتظار، زبان کی رکاوٹ، ترجمہ شدہ مسودوں کا جائزہ..."},
-    {id:"l3",type:"open",q:"کیا آپ اٹالین ریونیو ایجنسی کے سرکاری RLI نظام سے واقف ہیں؟ کیا آپ خود رجسٹر کرتے ہیں یا کسی کو ادائیگی کرتے ہیں؟ سب سے پریشان کن چیز کیا ہے؟",hint:"ایمانداری سے بتائیں — ہم حقیقت جاننا چاہتے ہیں۔"},
-    {id:"l4",type:"open",q:"تصور کریں کہ ٹیکس ویب سائٹ پر ایک سرکاری \"لائیو\" معاہدہ ہو جو خودکار طور پر ڈیٹا بھرتا ہو اور آپ اور کرایہ دار مل کر آن لائن جائزہ لے سکیں۔ آپ کو کیا فوائد اور خطرات نظر آتے ہیں؟",hint:"مالک کا مکمل کنٹرول / جزوی تعاون / مساوی تعاون"},
-    {id:"l5",type:"open",q:"اگر نظام دونوں فریقوں کے الیکٹرانک دستخط کے فوری بعد خودکار طور پر معاہدہ رجسٹر کر کے ٹیکس حساب کر دے — کیا آپ اسے استعمال کریں گے؟"},
-    {id:"l6",type:"choice",q:"ٹیکس ویب سائٹ پر غلطی جرمانے کا سبب بن سکتی ہے۔ کس قسم کی رہنمائی آپ کو محفوظ محسوس کرائے گی؟",opts:["پیچیدہ اصطلاحات کی لغت","اصل جمع کرانے سے پہلے آزمائشی نقل","تصدیق سے پہلے بصری خلاصہ","ریئل ٹائم چیٹ سپورٹ","مذکورہ بالا سب"]},
-    {id:"l7",type:"open",q:"اگر آپ سرکاری کرایہ ویب سائٹ میں ایک 'جادوئی' خصوصیت شامل کر سکتے، تو وہ کیا ہوگی؟"},
-    {id:"l8",type:"yesno",q:"کیا آپ باہمی جائزہ نظام (مالک ↔ کرایہ دار) سے راحت محسوس کریں گے جو مستقبل کے صارفین کو دکھائی دے؟",follow:"کوئی پہلو جو آپ کو پریشان کرتا ہو؟"}
+    {id:"l1",type:"choice",q:"آپ عام طور پر اپنے کرایہ نامے کا متن کیسے تیار کرتے ہیں؟",opts:["انٹرنیٹ سے ٹیمپلیٹ ڈاؤن لوڈ کر کے خود کرتا/کرتی ہوں","رئیل اسٹیٹ ایجنسی پر انحصار کرتا/کرتی ہوں","میرا اکاؤنٹنٹ یا CAF سب کچھ سنبھالتا ہے","پرانا کرایہ نامہ استعمال کر کے صرف نام بدلتا/بدلتی ہوں"]},
+    {id:"l2",type:"choice",q:"RLI ویب سائٹ سے آپ کو تفویض کرنے یا مشکل پیش آنے کی بنیادی وجہ کیا ہے؟",opts:["غلطی کرنے اور جرمانے سے ڈرتا/ڈرتی ہوں","ویب سائٹ بہت پیچیدہ ہے / زبان بہت سرکاری ہے","میرے پاس وقت ضائع کرنے کی گنجائش نہیں","میں پہلے سے خود بغیر مسئلے کے کرتا/کرتی ہوں","دیگر"],follow_open:"اگر دیگر ہو تو براہ کرم وضاحت کریں:"},
+    {id:"l3",type:"multi",q:"غیر ملکی کرایہ داروں کو کرایہ دیتے وقت آپ کو سب سے بڑے چیلنجز کیا ہیں؟",opts:["قانونی شقیں سمجھانے میں زبان کی رکاوٹ","ان کے اطالوی دستاویزات کا انتظار (مثلاً ٹیکس نمبر)","کرایہ نامے کی مسودات ادھر ادھر بھیجنے میں وقت کا ضیاع","کوئی خاص مشکل نہیں","میں غیر ملکیوں کو کرایہ نہیں دیتا/دیتی"]},
+    {id:"l4",type:"choice",q:"تصور کریں کہ ٹیکس ویب سائٹ پر ایک سرکاری 'لائیو' کرایہ نامہ ہو جو آن لائن بھرا جائے اور سرکاری ترجمے ہوں۔ آپ کرایہ دار کے ساتھ کس سطح کا تعاون پسند کریں گے؟",opts:["مکمل کنٹرول: میں سب کچھ بھرتا/بھرتی ہوں؛ کرایہ دار صرف پڑھ کر دستخط کرے","جزوی تعاون: کرایہ دار صرف اپنی ذاتی معلومات داخل کرے؛ باقی میں فیصلہ کروں","مکمل تعاون: ہم مل کر آن لائن شقیں اور شرائط ترتیب دے سکتے ہیں"]},
+    {id:"l5",type:"choice",q:"اگر نظام دونوں فریقوں کے الیکٹرانک دستخط (SPID) کے فوراً بعد خودکار طور پر کرایہ نامہ رجسٹر کرے اور ٹیکس حساب کرے، تو کیا آپ اس پر بھروسہ کریں گے؟",opts:["ہاں، بالکل — بہت آسان ہوگا","ہاں، لیکن صرف اگر تصدیق سے پہلے واضح بصری خلاصہ دکھائے","نہیں، میں چاہتا/چاہتی ہوں کہ اکاؤنٹنٹ اعداد چیک کرے"]},
+    {id:"l6",type:"multi",q:"کرایہ نامہ بھرتے وقت کون سی خصوصیت آپ کو غلطیوں سے 'محفوظ' محسوس کرائے گی؟",opts:["ایک بلٹ ان لغت جو مشکل ٹیکس اصطلاحات کو آسان زبان میں بیان کرے","اصل جمع کرانے سے پہلے حتمی نتیجہ دیکھنے کے لیے 'ٹیسٹ سمولیشن'","ایک قدم بہ قدم رہنما جو ایک وقت میں صرف ایک آسان سوال پوچھے","لائیو چیٹ یا انسانی سپورٹ"]},
+    {id:"l7",type:"choice",q:"کیا آپ ٹیکس پورٹل پر 'آفیشل ریٹنگ' سسٹم کی حمایت کریں گے جہاں کرایہ نامے کے اختتام پر آپ کرایہ دار کے بارے میں رائے دے سکیں (اور وہ آپ کے بارے میں)؟",opts:["ہاں — مجھے خراب کرایہ داروں سے بچنے میں مدد ملے گی","ہاں، لیکن ریٹنگ معروضی ڈیٹا پر مبنی ہونی چاہیے","نہیں — پرائیویسی کے مسائل یا انتقامی ریٹنگ کا ڈر ہے","دلچسپی نہیں"]},
+    {id:"l8",type:"open",q:"اگر آپ کے پاس ایک جادوئی چھڑی ہو، تو آپ سرکاری کرایہ ٹیکس ویب سائٹ میں کون سی ایک خصوصیت شامل کریں گے؟",hint:"اختیاری — اگر کچھ نہ آئے تو چھوڑ دیں۔"}
   ]
 },
 es:{
@@ -232,25 +240,26 @@ es:{
   demo_title:"Antes de empezar",demo_sub:"Esta información nos ayuda a conocer a nuestros usuarios.",
   f_age:"Edad",f_nat:"Nacionalidad",ph_age:"ej. 27",ph_nat:"ej. China",
   next:"Siguiente →",back:"← Atrás",submit:"Enviar respuestas",
-  req:"Por favor responde antes de continuar.",why_label:"¿Puedes explicarlo brevemente?",
+  req:"Por favor responde antes de continuar.",why_label:"¿Puedes explicarlo brevemente?",multi_hint:"Selecciona todas las que correspondan",
   ty_title:"¡Muchas gracias!",ty_msg:"Tus respuestas nos ayudan a diseñar un sistema más accesible para todos.",
   yes:"Sí",no:"No",
   tqs:[
-    {id:"t1",type:"open",q:"¿Qué problemas u obstáculos específicos has encontrado durante el proceso de alquiler?",hint:"p. ej. escasez de vivienda, barrera idiomática, comunicación lenta, burocracia..."},
+    {id:"t1",type:"choice",q:"Mirando atrás en tu búsqueda de piso, ¿qué momento te hizo sentir más impotente o ansioso/a?",opts:["Encontrar un alojamiento disponible","Entender el contrato y los términos legales","Comunicarme con el casero/a","Lidiar con la burocracia y los documentos","Esperar respuestas o decisiones","Otro"]},
     {id:"t2",type:"yesno",q:"¿Has tenido alguna vez la necesidad o intención de modificar cláusulas específicas de un contrato de alquiler?",follow:"¿Qué querías cambiar y cómo fue?"},
-    {id:"t3",type:"yesno",q:"¿Has tenido problemas de comunicación al hablar de las condiciones del contrato con tu casero/a?",follow:"¿Puedes describir la situación? (p. ej. idioma, tiempos, claridad de los términos)"},
-    {id:"t4",type:"open",q:"En tu experiencia, ¿cuánto tiempo suele llevar todo el proceso de modificar y finalizar un contrato?",hint:"Incluye comunicación, espera de documentos, firma, registro..."},
-    {id:"t5",type:"choice",q:"¿Qué te parecería un sistema de valoración de propietarios en esta plataforma?",opts:["Lo usaría para comprobar la reputación antes de firmar","Lo usaría para dejar una opinión después","Lo usaría para ambas cosas","No me interesa / no lo usaría"],follow_open:"¿Hay algo que te incomodaría de este sistema?"}
+    {id:"t3",type:"yesno",q:"¿Has tenido problemas de comunicación con tu casero/a al hablar de las condiciones del contrato?",follow:"¿Puedes describir brevemente la situación?"},
+    {id:"t4",type:"choice",q:"¿Cuánto tiempo suele llevar el proceso de modificar o finalizar un contrato?",opts:["Menos de 1 semana","1–2 semanas","2–4 semanas","Más de 1 mes","Nunca he tenido que modificar un contrato"]},
+    {id:"t5",type:"yesno",q:"¿Crees que tener un 'Perfil Verificado' (identidad y estabilidad financiera pre-comprobadas) cambiaría cómo los propietarios responden a tus consultas?",follow:"¿Por qué? ¿Qué diferencia crees que haría?"},
+    {id:"t6",type:"choice",q:"¿Usarías un sistema de valoración de propietarios en esta plataforma?",opts:["Sí, para comprobar la reputación antes de firmar","Sí, para dejar una opinión después","Sí, para ambas cosas","No, no me interesa"]}
   ],
   lqs:[
-    {id:"l1",type:"open",q:"¿Cómo preparaste tu último contrato de alquiler y por qué elegiste ese método?",hint:"p. ej. plantilla descargada tú mismo, agencia, CAF, gestor, amigo con experiencia..."},
-    {id:"l2",type:"open",q:"Al alquilar a inquilinos extranjeros, ¿cuáles son los principales cuellos de botella?",hint:"p. ej. esperar el Codice Fiscale, barreras idiomáticas, revisar borradores traducidos, correcciones repetidas..."},
-    {id:"l3",type:"open",q:"¿Conoces el sistema RLI oficial de la Agencia Tributaria italiana? ¿Registras los contratos tú mismo o pagas a alguien? ¿Qué es lo más frustrante y cuánto te cuesta?",hint:"Sé honesto/a — queremos entender la realidad, no el procedimiento ideal."},
-    {id:"l4",type:"open",q:"Imagina un contrato oficial \"en vivo\" en el sitio fiscal que rellena datos automáticamente y permite que tú y el inquilino lo reviséis juntos online. ¿Qué ventajas y riesgos ves? ¿Qué debería poder editar el inquilino? ¿Qué modo preferirías?",hint:"Control total del propietario / colaboración parcial / colaboración igualitaria"},
-    {id:"l5",type:"open",q:"Si el sistema registrase automáticamente el contrato y calculase los impuestos justo después de que ambos firmasen electrónicamente — ¿lo usarías? ¿Qué necesitarías ver en pantalla para confiar plenamente?"},
-    {id:"l6",type:"choice",q:"Un error en el sitio fiscal puede acarrear sanciones. ¿Qué función de ayuda te haría sentir seguro/a al redactar?",opts:["Un glosario de términos complejos","Una simulación de prueba antes del envío real","Un resumen visual antes de confirmar","Soporte por chat en tiempo real","Todas las anteriores"]},
-    {id:"l7",type:"open",q:"Si pudieras añadir una función de ensueño al sitio oficial de alquiler, ¿cuál sería?"},
-    {id:"l8",type:"yesno",q:"¿Te sentirías cómodo/a con un sistema de reseñas mutuas (propietario ↔ inquilino) visibles para futuros usuarios?",follow:"¿Hay algún aspecto que te preocupe?"}
+    {id:"l1",type:"choice",q:"¿Cómo sueles preparar el texto de tus contratos de alquiler?",opts:["Descargo una plantilla de internet y lo hago yo mismo","Me apoyo en una agencia inmobiliaria","Mi gestor/asesor fiscal (commercialista) o CAF lo gestiona todo","Uso un contrato antiguo y solo cambio los nombres"]},
+    {id:"l2",type:"choice",q:"¿Cuál es el principal motivo por el que delegas o tienes dificultades con el sitio RLI de la Agencia Tributaria?",opts:["Tengo miedo de cometer errores y recibir sanciones","El sitio es demasiado complicado / el lenguaje es demasiado burocrático","No tengo tiempo que perder","Ya lo hago yo mismo sin problemas","Otro"],follow_open:"Si has elegido otro, especifica:"},
+    {id:"l3",type:"multi",q:"¿Cuáles son tus mayores dificultades al alquilar a inquilinos extranjeros?",opts:["Barreras lingüísticas al explicar cláusulas legales","Esperar sus documentos italianos (p. ej. Codice Fiscale)","Perder el tiempo enviando borradores del contrato de un lado a otro","Sin dificultades particulares","No alquilo a extranjeros"]},
+    {id:"l4",type:"choice",q:"Imagina un contrato oficial 'en vivo' en el sitio fiscal, rellenable online con traducciones oficiales. ¿Qué nivel de colaboración preferirías con el inquilino?",opts:["Control total: lo relleno todo yo; el inquilino solo puede leer y firmar","Colaboración parcial: el inquilino introduce solo sus datos personales; yo decido el resto","Colaboración total: podemos editar cláusulas y condiciones juntos online"]},
+    {id:"l5",type:"choice",q:"Si el sistema registrase automáticamente el contrato y calculase los impuestos justo después de que ambos firmasen electrónicamente (SPID), ¿confiarías en él?",opts:["Sí, absolutamente — sería muy cómodo","Sí, pero SOLO si muestra un resumen visual claro antes de confirmar","No, prefiero que un gestor revise los números"]},
+    {id:"l6",type:"multi",q:"¿Qué función te haría sentir 'seguro/a' frente a errores al rellenar el contrato?",opts:["Un glosario integrado que explica términos fiscales difíciles en palabras sencillas","Una 'Simulación de prueba' para ver el resultado final antes del envío real","Una guía paso a paso (Asistente) que hace una pregunta simple a la vez","Chat en vivo o asistencia humana"]},
+    {id:"l7",type:"choice",q:"¿Apoyarías un sistema de 'Valoración Oficial' en el portal fiscal donde puedas dejar opiniones sobre el inquilino (y viceversa) al final del contrato?",opts:["Sí — me ayudaría a evitar malos inquilinos","Sí, pero las valoraciones deben basarse en datos objetivos (ej. pagó el alquiler a tiempo)","No — temo problemas de privacidad o valoraciones de represalia","No me interesa"]},
+    {id:"l8",type:"open",q:"Si tuvieras una varita mágica, ¿qué función añadirías al sitio oficial de alquiler?",hint:"Opcional — puedes saltártelo si no se te ocurre nada."}
   ]
 },
 fr:{
@@ -261,25 +270,26 @@ fr:{
   demo_title:"Avant de commencer",demo_sub:"Ces informations nous aident à comprendre qui sont nos utilisateurs.",
   f_age:"Âge",f_nat:"Nationalité",ph_age:"ex. 27",ph_nat:"ex. Chine",
   next:"Suivant →",back:"← Retour",submit:"Envoyer les réponses",
-  req:"Veuillez répondre avant de continuer.",why_label:"Pouvez-vous expliquer brièvement ?",
+  req:"Veuillez répondre avant de continuer.",why_label:"Pouvez-vous expliquer brièvement ?",multi_hint:"Sélectionnez tout ce qui s'applique",
   ty_title:"Merci beaucoup !",ty_msg:"Vos réponses nous aident à concevoir un système plus accessible pour tous.",
   yes:"Oui",no:"Non",
   tqs:[
-    {id:"t1",type:"open",q:"Quels problèmes ou obstacles spécifiques avez-vous rencontrés lors du processus de location ?",hint:"ex. pénurie de logements, barrière linguistique, communication lente, bureaucratie..."},
+    {id:"t1",type:"choice",q:"En repensant à votre recherche de logement, quel moment vous a rendu le plus impuissant(e) ou anxieux/euse ?",opts:["Trouver un logement disponible","Comprendre le contrat et les termes juridiques","Communiquer avec le propriétaire","Gérer la bureaucratie et les documents","Attendre des réponses ou des décisions","Autre"]},
     {id:"t2",type:"yesno",q:"Avez-vous déjà eu l'intention ou le besoin de modifier des clauses spécifiques d'un contrat de location ?",follow:"Que vouliez-vous changer, et comment cela s'est-il passé ?"},
-    {id:"t3",type:"yesno",q:"Avez-vous rencontré des problèmes de communication avec votre propriétaire concernant les termes du contrat ?",follow:"Pouvez-vous décrire la situation ? (ex. langue, délais, clarté des termes)"},
-    {id:"t4",type:"open",q:"D'après votre expérience, combien de temps prend généralement tout le processus de modification et de finalisation d'un contrat ?",hint:"Incluez la communication, l'attente des documents, la signature, l'enregistrement..."},
-    {id:"t5",type:"choice",q:"Que penseriez-vous d'un système de notation des propriétaires sur cette plateforme ?",opts:["Je l'utiliserais pour vérifier la réputation avant de signer","Je l'utiliserais pour laisser un avis après","Je l'utiliserais pour les deux","Cela ne m'intéresse pas / je ne l'utiliserais pas"],follow_open:"Y a-t-il quelque chose qui vous mettrait mal à l'aise avec ce système ?"}
+    {id:"t3",type:"yesno",q:"Avez-vous rencontré des problèmes de communication avec votre propriétaire concernant les termes du contrat ?",follow:"Pouvez-vous décrire brièvement la situation ?"},
+    {id:"t4",type:"choice",q:"Combien de temps prend généralement le processus de modification ou de finalisation d'un contrat ?",opts:["Moins d'1 semaine","1–2 semaines","2–4 semaines","Plus d'1 mois","Je n'ai jamais eu à modifier un contrat"]},
+    {id:"t5",type:"yesno",q:"Pensez-vous qu'avoir un 'Profil Vérifié' (identité et stabilité financière pré-vérifiées) changerait la façon dont les propriétaires répondent à vos demandes ?",follow:"Pourquoi ? Quelle différence pensez-vous que cela ferait ?"},
+    {id:"t6",type:"choice",q:"Utiliseriez-vous un système de notation des propriétaires sur cette plateforme ?",opts:["Oui, pour vérifier la réputation avant de signer","Oui, pour laisser un avis après","Oui, pour les deux","Non, pas intéressé(e)"]}
   ],
   lqs:[
-    {id:"l1",type:"open",q:"Comment avez-vous préparé votre dernier contrat de location, et pourquoi avez-vous choisi cette méthode ?",hint:"ex. modèle téléchargé soi-même, agence, CAF, comptable, ami expert..."},
-    {id:"l2",type:"open",q:"Lorsque vous louez à des locataires étrangers, quels sont les principaux obstacles ?",hint:"ex. attente du Codice Fiscale, barrière linguistique, révision de brouillons traduits, corrections répétées..."},
-    {id:"l3",type:"open",q:"Connaissez-vous le système RLI officiel de l'Agence des revenus italienne ? Enregistrez-vous vous-même les contrats ou payez-vous quelqu'un ? Quelle est la partie la plus frustrante et combien cela vous coûte-t-il ?",hint:"Soyez honnête — nous voulons comprendre la réalité, pas la procédure idéale."},
-    {id:"l4",type:"open",q:"Imaginez un contrat officiel \"en direct\" sur le site fiscal qui remplit automatiquement les données et vous permet, à vous et au locataire, de le réviser ensemble en ligne. Quels avantages et risques voyez-vous ? Que devrait pouvoir modifier le locataire ? Quel mode préféreriez-vous ?",hint:"Contrôle total du propriétaire / collaboration partielle / collaboration égale"},
-    {id:"l5",type:"open",q:"Si le système enregistrait automatiquement le contrat et calculait vos impôts juste après la signature électronique des deux parties — l'utiliseriez-vous ? Que devriez-vous voir à l'écran pour lui faire entièrement confiance ?"},
-    {id:"l6",type:"choice",q:"Une erreur sur le site fiscal peut entraîner des amendes. Quel type de guide vous mettrait à l'aise lors de la rédaction ?",opts:["Un glossaire pour les termes complexes","Une simulation test avant soumission réelle","Un résumé visuel avant confirmation","Assistance par chat en temps réel","Toutes les options ci-dessus"]},
-    {id:"l7",type:"open",q:"Si vous pouviez ajouter une fonction idéale au site officiel de location, laquelle serait-ce ?"},
-    {id:"l8",type:"yesno",q:"Seriez-vous à l'aise avec un système d'avis mutuels (propriétaire ↔ locataire) visibles pour les futurs utilisateurs ?",follow:"Y a-t-il des aspects qui vous préoccupent ?"}
+    {id:"l1",type:"choice",q:"Comment préparez-vous habituellement le texte de vos contrats de location ?",opts:["Je télécharge un modèle sur internet et je m'en occupe moi-même","Je fais appel à une agence immobilière","Mon comptable (commercialista) ou le CAF s'en charge","J'utilise un ancien contrat en changeant juste les noms"]},
+    {id:"l2",type:"choice",q:"Quelle est la principale raison pour laquelle vous déléguez ou avez des difficultés avec le site RLI ?",opts:["J'ai peur de faire des erreurs et d'avoir des amendes","Le site est trop complexe / le langage est trop bureaucratique","Je n'ai pas de temps à perdre","Je le fais déjà moi-même sans problème","Autre"],follow_open:"Si autre, précisez :"},
+    {id:"l3",type:"multi",q:"Quels sont vos plus grands défis lorsque vous louez à des locataires étrangers ?",opts:["Barrières linguistiques pour expliquer les clauses juridiques","Attendre leurs documents italiens (ex. Codice Fiscale)","Perdre du temps à envoyer des brouillons de contrat","Aucune difficulté particulière","Je ne loue pas à des étrangers"]},
+    {id:"l4",type:"choice",q:"Imaginez un contrat officiel 'en direct' sur le site fiscal, rempli en ligne avec des traductions officielles. Quel niveau de collaboration préféreriez-vous avec le locataire ?",opts:["Contrôle total : je remplis tout ; le locataire peut seulement lire et signer","Collaboration partielle : le locataire saisit uniquement ses données personnelles","Collaboration totale : nous pouvons modifier les clauses ensemble en ligne"]},
+    {id:"l5",type:"choice",q:"Si le système enregistrait automatiquement le contrat et calculait les impôts juste après la signature électronique des deux parties (SPID), lui feriez-vous confiance ?",opts:["Oui, absolument — ce serait très pratique","Oui, mais SEULEMENT s'il affiche un résumé visuel clair avant de confirmer","Non, je préfère qu'un comptable vérifie les chiffres"]},
+    {id:"l6",type:"multi",q:"Quelle fonctionnalité vous ferait vous sentir 'en sécurité' face aux erreurs lors du remplissage du contrat ?",opts:["Un glossaire intégré expliquant les termes fiscaux difficiles en mots simples","Une 'Simulation test' pour voir le résultat final avant la soumission réelle","Un guide étape par étape (Assistant) posant une question simple à la fois","Chat en direct ou assistance humaine"]},
+    {id:"l7",type:"choice",q:"Soutiendriez-vous un système de 'Notation Officielle' sur le portail fiscal permettant de laisser des commentaires sur le locataire (et vice versa) à la fin du contrat ?",opts:["Oui — cela m'aiderait à éviter les mauvais locataires","Oui, mais les notes doivent être basées sur des données objectives","Non — je crains des problèmes de confidentialité ou des notes de représailles","Pas intéressé(e)"]},
+    {id:"l8",type:"open",q:"Si vous aviez une baguette magique, quelle fonctionnalité ajouteriez-vous au site officiel de location ?",hint:"Facultatif — passez si rien ne vous vient à l'esprit."}
   ]
 }
 };
@@ -341,10 +351,7 @@ function showQ(){
     body=`<div class="choices">${q.opts.map(o=>`<button class="choice${cur===o?" sel":""}" onclick="setChoice('${q.id}','${o.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}',this)"><span class="dot"></span>${o}</button>`).join("")}</div>${q.follow_open?`<div class="followup${cur?" show":""}" id="fu" style="margin-top:14px"><p class="fu-label">${t.why_label}</p><textarea id="fu_ta" placeholder="...">${answers[q.id+"_why"]||""}</textarea></div>`:""}`;
   } else if(q.type==="multi"){
     const cur=answers[q.id]?answers[q.id].split("|||"):[];
-    body=`<p class="q-hint" style="margin-bottom:12px">Select all that apply</p><div class="choices">${q.opts.map(o=>{
-      const sel=cur.includes(o);
-      return `<button class="choice${sel?" sel":""}" style="border-radius:10px" onclick="toggleMulti('${q.id}','${o.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}',this)"><span class="dot" style="border-radius:3px"></span>${o}</button>`;
-    }).join("")}</div>`;
+    body=`<p class="multi-hint">${t.multi_hint}</p><div class="choices">${q.opts.map(o=>{const sel=cur.includes(o);return`<button class="choice${sel?" sel":""}" onclick="toggleMulti('${q.id}','${o.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}',this)"><span class="sq"></span>${o}</button>`;}).join("")}</div>`;
   }
 
   render(`<div class="chip">${qIdx+1} / ${total}</div><p class="q-label">${q.q}</p>${body}<div class="nav"><button class="btn-back" onclick="goBack()">${t.back}</button><button class="btn-next" onclick="goNext()">${isLast?t.submit:t.next}</button></div>`,p);
@@ -376,7 +383,8 @@ function goNext(){
   if(ta)answers[q.id]=ta.value;
   const futa=document.getElementById("fu_ta");
   if(futa)answers[q.id+"_why"]=futa.value;
-  if(q.type==="open"&&q.id!=="l8"&&!answers[q.id]?.trim()){alert(t.req);return;}
+  const isOptional=q.id==="l8";
+  if(q.type==="open"&&!isOptional&&!answers[q.id]?.trim()){alert(t.req);return;}
   if((q.type==="yesno"||q.type==="choice")&&!answers[q.id]){alert(t.req);return;}
   if(q.type==="multi"&&!answers[q.id]){alert(t.req);return;}
   qIdx++;showQ();
@@ -385,13 +393,7 @@ function goBack(){if(qIdx===0){showDemo();return;}qIdx--;showQ();}
 
 function submitAnswers(){
   const payload={timestamp:new Date().toISOString(),lang,role,age,nationality,...answers};
-  // Use no-cors to avoid CORS block — Apps Script accepts this
-  fetch(SHEET_URL,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{"Content-Type":"text/plain"},
-    body:JSON.stringify(payload)
-  }).catch(()=>{});
+  fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)}).catch(()=>{});
   const t=T[lang];
   render(`<div class="ty"><span class="ty-icon">✅</span><h2>${t.ty_title}</h2><p>${t.ty_msg}</p></div>`,100);
 }
